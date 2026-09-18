@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi CRM</title>
+<style>
+  :root {
+    --bg: #05060a;
+    --bg-soft: #0b0d16;
+    --panel: rgba(255, 255, 255, 0.05);
+    --border: rgba(255, 255, 255, 0.09);
+    --text: #eef0f7;
+    --muted: #9aa2b8;
+    --accent1: #7c5cff;
+    --accent2: #35d0ff;
+    --accent3: #ff5cc4;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    min-height: 100vh;
+    background:
+      radial-gradient(circle at 15% 10%, rgba(124, 92, 255, 0.25), transparent 45%),
+      radial-gradient(circle at 85% 0%, rgba(53, 208, 255, 0.2), transparent 40%),
+      radial-gradient(circle at 50% 100%, rgba(255, 92, 196, 0.12), transparent 40%),
+      var(--bg);
+  }
+
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px 6vw;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    backdrop-filter: blur(14px);
+    background: rgba(5, 6, 10, 0.55);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: 0.5px;
+  }
+
+  .logo-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent1), var(--accent2));
+    box-shadow: 0 0 18px var(--accent2);
+  }
+
+  nav .badge {
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 0.78rem;
+    color: var(--muted);
+    background: var(--panel);
+  }
+
+  header.hero {
+    text-align: center;
+    padding: 9vh 6vw 8vh;
+  }
+
+  .eyebrow {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 999px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--accent2);
+    font-size: 0.8rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+
+  h1.title {
+    font-size: clamp(2.6rem, 7vw, 5.2rem);
+    line-height: 1.05;
+    margin: 0 0 22px;
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    background: linear-gradient(100deg, #ffffff 10%, var(--accent2) 45%, var(--accent1) 70%, var(--accent3) 95%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .subtitle {
+    max-width: 640px;
+    margin: 0 auto 40px;
+    color: var(--muted);
+    font-size: clamp(1rem, 1.6vw, 1.25rem);
+    line-height: 1.6;
+  }
+
+  .cta-row {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    padding: 14px 30px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: inline-block;
+  }
+
+  .btn-primary {
+    background: linear-gradient(120deg, var(--accent1), var(--accent2));
+    color: #050608;
+    box-shadow: 0 10px 30px -8px rgba(124, 92, 255, 0.6);
+  }
+
+  .btn-secondary {
+    background: var(--panel);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .btn:hover { transform: translateY(-3px); }
+
+  section {
+    padding: 6vh 6vw;
+  }
+
+  .section-heading {
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto 56px;
+  }
+
+  .section-heading h2 {
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    margin: 0 0 14px;
+    font-weight: 700;
+  }
+
+  .section-heading p {
+    color: var(--muted);
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 22px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 30px;
+    backdrop-filter: blur(10px);
+    transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at top left, rgba(124, 92, 255, 0.15), transparent 60%);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(124, 92, 255, 0.5);
+  }
+
+  .card:hover::before { opacity: 1; }
+
+  .card .icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, rgba(124, 92, 255, 0.35), rgba(53, 208, 255, 0.25));
+    border: 1px solid var(--border);
+  }
+
+  .card h3 {
+    font-size: 1.15rem;
+    margin: 0 0 10px;
+    font-weight: 700;
+  }
+
+  .card p {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  .tag {
+    display: inline-block;
+    margin-top: 16px;
+    font-size: 0.72rem;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: var(--accent2);
+    border: 1px solid rgba(53, 208, 255, 0.35);
+    background: rgba(53, 208, 255, 0.08);
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+
+  footer {
+    text-align: center;
+    padding: 40px 6vw 60px;
+    color: var(--muted);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--border);
+  }
+
+  footer span {
+    color: var(--accent2);
+  }
+</style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">
+      <span class="logo-dot"></span>
+      Mi CRM
+    </div>
+    <span class="badge">2026 · Plataforma en la nube</span>
+  </nav>
+
+  <header class="hero">
+    <span class="eyebrow">Nueva generación de CRM</span>
+    <h1 class="title">Bienvenido a mi CRM</h1>
+    <p class="subtitle">
+      La plataforma todo-en-uno para gestionar clientes, vender productos digitales
+      y automatizar tu negocio con inteligencia artificial, diseñada para el 2026.
+    </p>
+    <div class="cta-row">
+      <a href="#caracteristicas" class="btn btn-primary">Ver características</a>
+      <a href="#" class="btn btn-secondary">Empezar gratis</a>
+    </div>
+  </header>
+
+  <section id="caracteristicas">
+    <div class="section-heading">
+      <h2>Todo lo que necesita tu negocio</h2>
+      <p>Un solo panel para gestionar relaciones con clientes y vender online, potenciado por IA.</p>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="icon">👥</div>
+        <h3>Gestión de clientes</h3>
+        <p>
+          Organiza contactos, historial de interacciones, oportunidades de venta y
+          seguimiento del ciclo de vida de cada cliente desde un solo lugar.
+        </p>
+        <span class="tag">Core</span>
+      </div>
+
+      <div class="card">
+        <div class="icon">🛒</div>
+        <h3>E-commerce de productos digitales</h3>
+        <p>
+          Vende cursos, plantillas, software, ebooks y otros productos digitales
+          con carrito, pagos y entrega automática integrados.
+        </p>
+        <span class="tag">Core</span>
+      </div>
+
+      <div class="card">
+        <div class="icon">🤖</div>
+        <h3>Automatización con IA</h3>
+        <p>
+          Asistente inteligente que califica leads, sugiere próximos pasos, redacta
+          respuestas y automatiza recordatorios de seguimiento.
+        </p>
+        <span class="tag">IA</span>
+      </div>
+
+      <div class="card">
+        <div class="icon">📊</div>
+        <h3>Panel de analíticas y reportes</h3>
+        <p>
+          Dashboards en tiempo real con métricas de ventas, comportamiento de clientes,
+          embudo de conversión y KPIs clave del negocio.
+        </p>
+        <span class="tag">Insights</span>
+      </div>
+
+      <div class="card">
+        <div class="icon">🔗</div>
+        <h3>Integraciones</h3>
+        <p>
+          Conecta tu correo, WhatsApp, redes sociales y pasarelas de pago para
+          centralizar toda la comunicación y las transacciones con tus clientes.
+        </p>
+        <span class="tag">Conectado</span>
+      </div>
+
+      <div class="card">
+        <div class="icon">⚡</div>
+        <h3>Flujos de trabajo</h3>
+        <p>
+          Automatiza tareas repetitivas: alta de clientes, envío de facturas,
+          notificaciones y actualizaciones de estado sin esfuerzo manual.
+        </p>
+        <span class="tag">Productividad</span>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Hecho con <span>♥</span> para pequeños negocios · Mi CRM © 2026
+  </footer>
+
+</body>
+</html>
