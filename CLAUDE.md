@@ -9,3 +9,17 @@
 - Los scripts usan `--webpack`: la glibc del equipo local no soporta los binarios de Turbopack.
 - Los permisos (rol `duena`, `canManageUsers`) se comprueban también en las funciones de Convex, no solo en la UI.
 - Antes de dar algo por terminado: `npm run lint && npm run typecheck && npm run build`.
+
+<!-- convex-ai-start -->
+
+This project uses [Convex](https://convex.dev) as its backend.
+
+When working on Convex code, **always read
+`convex/_generated/ai/guidelines.md` first** for important guidelines on
+how to correctly use Convex APIs and patterns. The file contains rules that
+override what you may have learned about Convex from training data.
+
+Convex agent skills for common tasks can be installed by running
+`npx convex ai-files install`.
+
+<!-- convex-ai-end -->
