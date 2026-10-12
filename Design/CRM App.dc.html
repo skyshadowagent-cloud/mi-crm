@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="stylesheet" href="styles.css">
+<style>
+html, body { margin: 0; height: 100%; background: var(--color-bg); }
+a { color: var(--color-accent-text); }
+a:hover { color: var(--color-text); }
+</style>
+</helmet>
+<div data-theme="{{ themeAttr }}" style="height: 100dvh; display: flex; flex-direction: {{ shellDir }}; background: var(--color-bg); color: var(--color-text); font-family: var(--font-sans); font-size: var(--text-base); line-height: var(--leading-body); overflow: hidden; color-scheme: {{ colorScheme }};">
+
+  <sc-if value="{{ showSidebar }}" hint-placeholder-val="{{ false }}">
+    <aside class="sidebar" style="width: 232px; flex: none;" aria-label="Principal">
+      <div class="sidebar-brand"><span class="wordmark-mark"></span>CRM</div>
+      <button class="sidebar-item" aria-current="{{ hoyCurrent }}" onClick="{{ goHoy }}"><i class="ph ph-sun-horizon" aria-hidden="true"></i>Hoy<sc-if value="{{ hasPending }}"><span class="tag tag-warning tag-sm sidebar-badge tabular">{{ pendingCount }}</span></sc-if></button>
+      <button class="sidebar-item" aria-current="{{ clientesCurrent }}" onClick="{{ goClientes }}"><i class="ph ph-users" aria-hidden="true"></i>Clientes</button>
+      <button class="sidebar-item" aria-current="{{ cuentaCurrent }}" aria-label="{{ me.accountLabel }}" onClick="{{ goCuenta }}" style="margin-top: auto; min-height: 56px; gap: 10px; font-size: var(--text-sm);"><span class="avatar" aria-hidden="true">{{ me.initials }}</span><span style="flex: 1; min-width: 0; display: grid;"><span style="color: var(--color-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ me.full }}</span><span class="text-subtle" style="font-weight: 400;">{{ me.roleLabel }}</span></span><i class="ph ph-caret-up-down text-subtle" aria-hidden="true"></i></button>
+    </aside>
+  </sc-if>
+
+  <main style="flex: 1; min-height: 0; min-width: 0; display: flex; overflow: hidden;">
+
+    <sc-if value="{{ showLogin }}">
+      <section data-screen-label="Iniciar sesión" style="flex: 1; min-width: 0; overflow-y: auto; display: flex; justify-content: center; padding: 0 16px;">
+        <div class="safe-top" style="width: 100%; max-width: 400px; padding-top: 10vh; padding-bottom: 48px; display: grid; gap: 24px; align-content: start;">
+          <div style="display: flex; align-items: center; gap: 8px; font-family: var(--font-display); font-size: var(--text-xl); font-weight: 600; letter-spacing: var(--tracking-tight);"><span class="wordmark-mark" style="width: 10px; height: 10px;"></span>CRM</div>
+          <div>
+            <h1 style="font-size: var(--text-2xl);">Entrar</h1>
+            <p class="text-muted" style="margin: 4px 0 0;">Usa el email y la contraseña de tu cuenta del equipo.</p>
+          </div>
+          <form noValidate onSubmit="{{ doLogin }}" style="display: grid; gap: 16px;">
+            <sc-if value="{{ loginError }}">
+              <div class="banner" role="alert" style="background: var(--color-danger-bg); color: var(--color-danger-fg);"><i class="ph ph-warning-circle" aria-hidden="true"></i><span>{{ loginError }}</span></div>
+            </sc-if>
+            <div class="field">
+              <label for="l-email">Email</label>
+              <div class="input-wrap">
+                <i class="ph ph-envelope-simple" aria-hidden="true"></i>
+                <input id="l-email" class="input" type="email" inputMode="email" autoComplete="username" autoCapitalize="none" spellCheck="false" placeholder="nombre@empresa.com" value="{{ login.email }}" onChange="{{ onLEmail }}" aria-invalid="{{ lErr.emailInvalid }}">
+              </div>
+              <sc-if value="{{ lErr.email }}"><span class="field-error"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ lErr.email }}</span></sc-if>
+            </div>
+            <div class="field">
+              <label for="l-pass">Contraseña</label>
+              <div class="input-wrap">
+                <i class="ph ph-lock-simple" aria-hidden="true"></i>
+                <input id="l-pass" class="input" type="{{ pwType }}" autoComplete="current-password" placeholder="Mínimo 8 caracteres" value="{{ login.password }}" onChange="{{ onLPass }}" aria-invalid="{{ lErr.passwordInvalid }}" style="padding-right: 3.25rem;">
+                <button type="button" class="btn btn-icon btn-lg btn-ghost" aria-pressed="{{ login.show }}" aria-label="{{ pwToggleLabel }}" title="{{ pwToggleLabel }}" aria-controls="l-pass" onClick="{{ togglePw }}" style="position: absolute; right: 0; top: 0; color: var(--color-text-muted);"><i class="ph {{ pwIcon }}" aria-hidden="true"></i></button>
+              </div>
+              <sc-if value="{{ lErr.password }}"><span class="field-error"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ lErr.password }}</span></sc-if>
+            </div>
+            <label style="display: flex; align-items: center; gap: 12px; min-height: 48px; cursor: pointer;"><input type="checkbox" checked="{{ login.remember }}" onChange="{{ toggleRemember }}" style="width: 20px; height: 20px; margin: 0; accent-color: var(--color-accent);">Mantener la sesión iniciada en este dispositivo</label>
+            <button type="submit" class="btn btn-primary btn-lg btn-block" aria-busy="{{ loggingIn }}" disabled="{{ loggingIn }}"><i class="ph {{ loginIcon }}" aria-hidden="true"></i>{{ loginLabel }}</button>
+          </form>
+          <div style="display: grid; gap: 8px; padding: 16px; border: 1px dashed var(--color-border-strong); border-radius: var(--radius-md);">
+            <div class="text-muted" style="font-size: var(--text-sm);">Cuentas de prueba · contraseña <span class="tabular" style="color: var(--color-text);">demo1234</span></div>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+              <sc-for list="{{ demoUsers }}" as="u" hint-placeholder-count="3">
+                <button type="button" class="chip" onClick="{{ u.onUse }}"><span class="avatar" aria-hidden="true" style="width: 22px; height: 22px; font-size: 10px;">{{ u.initials }}</span>{{ u.name }} · {{ u.role }}</button>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ showHoy }}" hint-placeholder-val="{{ true }}">
+      <section data-screen-label="Hoy" style="flex: 1; min-width: 0; overflow-y: auto;">
+        <div style="max-width: 720px; margin: 0 auto; padding: 0 16px 120px;">
+          <header class="safe-top" style="display: flex; align-items: flex-end; gap: 12px; padding-top: 24px; padding-bottom: 16px;">
+            <div style="flex: 1; min-width: 0;">
+              <div class="text-subtle" style="font-size: var(--text-sm);">{{ todayLabel }}</div>
+              <h1 style="font-size: var(--text-2xl);">Hoy</h1>
+            </div>
+            <span class="text-muted tabular" style="font-size: var(--text-sm); padding-bottom: 4px;">{{ pendingLabel }}</span>
+            <sc-if value="{{ showBottomNav }}"><button onClick="{{ openAccount }}" aria-label="{{ me.accountLabel }}" title="Tu cuenta" style="flex: none; width: 48px; height: 48px; display: grid; place-items: center; margin: 0 -8px -4px 0; border: 0; background: none; border-radius: 50%; cursor: pointer;"><span class="avatar" aria-hidden="true" style="width: 32px; height: 32px;">{{ me.initials }}</span></button></sc-if>
+          </header>
+          <sc-if value="{{ allDone }}">
+            <div class="card" style="align-items: flex-start; margin-bottom: 24px;">
+              <i class="ph ph-check-circle" style="font-size: 28px; color: var(--color-success-fg);" aria-hidden="true"></i>
+              <div style="font-weight: 500;">Todo listo por hoy</div>
+              <div class="text-muted" style="font-size: var(--text-sm);">No quedan tareas pendientes.</div>
+            </div>
+          </sc-if>
+          <div style="display: grid; gap: 24px;">
+            <sc-for list="{{ groups }}" as="g" hint-placeholder-count="2">
+              <div style="display: grid; gap: 8px;">
+                <h2 style="display: flex; gap: 8px; align-items: center; font-family: var(--font-sans); font-size: var(--text-sm); font-weight: 500; letter-spacing: 0; color: {{ g.color }};"><i class="ph ph-{{ g.icon }}" aria-hidden="true"></i>{{ g.label }}<span class="tabular text-subtle">{{ g.count }}</span></h2>
+                <sc-for list="{{ g.items }}" as="t" hint-placeholder-count="3">
+                  <div style="display: flex; align-items: center; gap: 8px; padding-right: 12px; background: var(--color-surface); border-radius: var(--radius-md); box-shadow: {{ t.ring }};">
+                    <button onClick="{{ t.openClient }}" aria-label="{{ t.openLabel }}" style="flex: 1; min-width: 0; min-height: 72px; display: flex; align-items: center; gap: 12px; padding: 12px 0 12px 16px; border: 0; background: none; font: inherit; color: inherit; text-align: left; cursor: pointer; border-radius: var(--radius-md) 0 0 var(--radius-md);">
+                      <span class="logo" aria-hidden="true" style="opacity: {{ t.dim }};">{{ t.initials }}</span>
+                      <div style="flex: 1; min-width: 0; display: grid; gap: 2px;">
+                        <div style="font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: {{ t.titleColor }};">{{ t.clientName }}</div>
+                        <div style="text-decoration: {{ t.deco }}; color: {{ t.actionColor }};">{{ t.title }}</div>
+                        <div style="display: flex; align-items: center; gap: 6px; font-size: var(--text-sm); color: {{ t.metaColor }};"><i class="ph ph-{{ t.metaIcon }}" aria-hidden="true"></i><span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ t.whenFull }}</span></div>
+                        <div style="display: flex; align-items: center; gap: 6px; font-size: var(--text-sm); color: var(--color-text-muted); min-width: 0;"><span class="avatar" aria-hidden="true" style="width: 20px; height: 20px; font-size: 10px;">{{ t.ownerInitials }}</span><span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Responsable: {{ t.ownerName }}</span></div>
+                      </div>
+                    </button>
+                    <button class="btn {{ t.btnClass }}" aria-pressed="{{ t.done }}" aria-label="{{ t.toggleLabel }}" onClick="{{ t.onToggle }}" style="flex: none; color: {{ t.btnColor }};"><i class="ph {{ t.btnIcon }}" aria-hidden="true"></i>{{ t.btnLabel }}</button>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ showTaskPanel }}">
+      <aside data-screen-label="Tarea" aria-label="Detalle de tarea" style="width: 400px; flex: none; overflow-y: auto; background: var(--color-surface); border-left: 1px solid var(--color-border); padding: 24px; display: flex; flex-direction: column; gap: 16px;">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <span class="text-subtle" style="font-size: var(--text-sm);">Seguimiento</span>
+          <button class="btn btn-icon btn-ghost" aria-label="Cerrar" title="Cerrar" onClick="{{ goHoy }}"><i class="ph ph-x" aria-hidden="true"></i></button>
+        </div>
+        <h2 style="font-size: var(--text-xl);">{{ task.title }}</h2>
+        <div style="display: flex; align-items: center; gap: 8px; color: {{ task.metaColor }};"><i class="ph ph-{{ task.metaIcon }}" aria-hidden="true"></i>{{ task.whenFull }}</div>
+        <div style="display: flex; align-items: center; gap: 8px;"><span class="avatar" aria-hidden="true">{{ task.ownerInitials }}</span><span><span class="text-muted">Responsable:</span> {{ task.ownerName }}</span><span class="text-subtle" style="font-size: var(--text-sm); margin-left: auto;">Creado por {{ task.createdByName }}</span></div>
+        <button class="contact-row" onClick="{{ task.openClient }}" style="border: 1px solid var(--color-border); border-radius: var(--radius-md); font: inherit; text-align: left; width: 100%;">
+          <span class="logo">{{ task.initials }}</span>
+          <div style="min-width: 0;"><div class="contact-row-name">{{ task.clientName }}</div><div class="contact-row-meta">{{ task.company }}</div></div>
+          <i class="ph ph-caret-right text-subtle" aria-hidden="true"></i>
+        </button>
+        <sc-if value="{{ task.note }}"><p class="text-muted" style="margin: 0;">{{ task.note }}</p></sc-if>
+        <div style="display: grid; gap: 8px; margin-top: auto;">
+          <button class="btn btn-primary btn-lg btn-block" onClick="{{ task.onToggle }}"><i class="ph {{ task.actionIcon }}" aria-hidden="true"></i>{{ task.actionLabel }}</button>
+          <a class="btn btn-secondary btn-lg btn-block" href="{{ task.tel }}"><i class="ph ph-phone" aria-hidden="true"></i>Llamar</a>
+        </div>
+      </aside>
+    </sc-if>
+
+    <sc-if value="{{ showList }}">
+      <section data-screen-label="Clientes" style="width: {{ listWidth }}; flex: none; min-width: 0; display: flex; flex-direction: column; border-right: {{ listBorder }}; background: var(--color-bg);">
+        <header class="safe-top" style="display: grid; gap: 12px; padding: 24px 16px 12px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <h1 style="flex: 1; font-size: var(--text-2xl);">Clientes</h1>
+            <sc-if value="{{ isWide }}">
+              <button class="btn btn-primary" onClick="{{ goNuevo }}"><i class="ph ph-plus" aria-hidden="true"></i>Nuevo</button>
+            </sc-if>
+          </div>
+          <div class="input-wrap">
+            <i class="ph ph-magnifying-glass" aria-hidden="true"></i>
+            <input class="input" type="search" placeholder="Nombre, teléfono o email" aria-label="Buscar clientes" value="{{ q }}" onChange="{{ onQ }}">
+          </div>
+          <div style="display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin: 0 -16px; padding: 0 16px 4px;">
+            <sc-for list="{{ stageChips }}" as="s" hint-placeholder-count="5">
+              <button class="chip" aria-pressed="{{ s.selected }}" onClick="{{ s.onClick }}">{{ s.label }}<span class="tabular text-subtle">{{ s.count }}</span></button>
+            </sc-for>
+          </div>
+        </header>
+        <div style="flex: 1; overflow-y: auto; padding-bottom: 120px;">
+          <sc-for list="{{ clientRows }}" as="c" hint-placeholder-count="6">
+            <button class="contact-row" onClick="{{ c.onOpen }}" aria-current="{{ c.current }}" aria-label="{{ c.label }}" style="width: 100%; border: 0; border-bottom: 1px solid var(--color-border); font: inherit; text-align: left; grid-template-columns: 2.75rem minmax(0, 1fr); align-items: start; background: {{ c.bg }}; box-shadow: {{ c.ring }};">
+              <span class="logo" aria-hidden="true">{{ c.initials }}</span>
+              <div style="min-width: 0; display: grid; gap: 4px;">
+                <div class="contact-row-name">{{ c.name }}</div>
+                <div class="contact-row-meta tabular">{{ c.ref }}</div>
+                <div style="display: flex; align-items: center; gap: 6px; font-size: var(--text-sm); color: var(--color-text-subtle);"><i class="ph ph-clock-counter-clockwise" aria-hidden="true"></i>{{ c.lastLabel }}</div>
+                <div style="display: flex; flex-wrap: wrap; gap: 6px; padding-top: 2px;">
+                  <span class="tag tag-sm tag-{{ c.tone }}"><i class="ph ph-{{ c.stageIcon }}" aria-hidden="true"></i>{{ c.stageLabel }}</span>
+                  <sc-if value="{{ c.hasTaskTag }}"><span class="tag tag-sm tag-{{ c.taskTone }}"><i class="ph ph-{{ c.taskIcon }}" aria-hidden="true"></i>{{ c.taskLabel }}</span></sc-if>
+                </div>
+              </div>
+            </button>
+          </sc-for>
+          <sc-if value="{{ noResults }}">
+            <div class="text-muted" style="padding: 32px 16px; text-align: center;">No hay clientes que coincidan.</div>
+          </sc-if>
+        </div>
+        <sc-if value="{{ showFab }}">
+          <button class="btn btn-fab" onClick="{{ goNuevo }}" style="position: fixed; right: 16px; bottom: 88px; z-index: 20;"><i class="ph ph-plus" aria-hidden="true"></i>Nuevo</button>
+        </sc-if>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ showPane }}">
+      <section style="flex: 1; min-width: 0; overflow-y: auto;">
+
+        <sc-if value="{{ showEmpty }}">
+          <div style="height: 100%; display: grid; place-items: center; padding: 24px;">
+            <div style="display: grid; justify-items: center; gap: 8px; text-align: center;">
+              <i class="ph ph-address-book text-subtle" style="font-size: 32px;" aria-hidden="true"></i>
+              <div class="text-muted">Elige un cliente para ver su ficha.</div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ showFicha }}">
+          <article data-screen-label="Ficha de cliente" style="max-width: 720px; padding: 0 16px 120px; display: grid; gap: 24px;">
+
+            <header class="safe-top" style="display: grid; gap: 16px; padding-top: 16px;">
+              <sc-if value="{{ showBack }}">
+                <div><button class="btn btn-ghost btn-lg" onClick="{{ goClientes }}" style="margin-left: -12px;"><i class="ph ph-arrow-left" aria-hidden="true"></i>Clientes</button></div>
+              </sc-if>
+              <div style="display: flex; align-items: flex-start; gap: 12px;">
+                <span class="logo" style="width: 56px; height: 56px; font-size: var(--text-base);">{{ client.initials }}</span>
+                <div style="flex: 1; min-width: 0; display: grid; gap: 2px;">
+                  <h1 style="font-size: var(--text-2xl); overflow-wrap: anywhere;">{{ client.name }}</h1>
+                  <div style="display: flex; align-items: center; gap: 6px; color: {{ client.companyColor }};"><i class="ph ph-buildings" aria-hidden="true"></i>{{ client.companyLabel }}</div>
+                </div>
+                <span class="tag tag-{{ client.tone }}" style="flex: none;"><i class="ph ph-{{ client.stageIcon }}" aria-hidden="true"></i>{{ client.stageLabel }}</span>
+              </div>
+              <div style="display: grid; background: var(--color-surface); border-radius: var(--radius-md); box-shadow: var(--shadow-sm);">
+                <div style="display: flex; align-items: center; gap: 4px; padding-right: 4px; border-bottom: 1px solid var(--color-border);">
+                  <a href="{{ client.tel }}" aria-label="{{ client.telLabel }}" style="flex: 1; min-width: 0; min-height: 52px; display: flex; align-items: center; gap: 12px; padding: 0 16px; color: {{ client.phoneColor }}; text-decoration: none;"><i class="ph ph-phone text-subtle" style="font-size: 20px;" aria-hidden="true"></i><span class="tabular">{{ client.phoneLabel }}</span></a>
+                  <sc-if value="{{ client.hasPhone }}"><a class="btn btn-icon btn-ghost" href="{{ client.wa }}" target="_blank" rel="noopener" aria-label="Escribir por WhatsApp" title="WhatsApp"><i class="ph ph-whatsapp-logo" aria-hidden="true"></i></a></sc-if>
+                </div>
+                <a href="{{ client.mailto }}" style="min-height: 52px; display: flex; align-items: center; gap: 12px; padding: 0 16px; color: {{ client.emailColor }}; text-decoration: none; border-bottom: 1px solid var(--color-border);"><i class="ph ph-envelope-simple text-subtle" style="font-size: 20px;" aria-hidden="true"></i><span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ client.emailLabel }}</span></a>
+                <div style="min-height: 52px; display: flex; align-items: center; gap: 12px; padding: 0 16px;"><i class="ph ph-{{ client.originIcon }} text-subtle" style="font-size: 20px;" aria-hidden="true"></i><span><span class="text-muted">Canal de origen:</span> {{ client.originLabel }}</span></div>
+              </div>
+            </header>
+
+            <section aria-label="Acciones rápidas" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px;">
+              <button class="btn btn-secondary" onClick="{{ goInteraccion }}" style="flex-direction: column; min-height: 80px; padding: 10px 6px; gap: 6px; font-size: var(--text-sm); line-height: 1.25; text-align: center; white-space: normal;"><i class="ph ph-note-pencil" style="font-size: 24px; color: var(--color-accent-text);" aria-hidden="true"></i>Anotar interacción</button>
+              <button class="btn btn-secondary" onClick="{{ goSeguimiento }}" style="flex-direction: column; min-height: 80px; padding: 10px 6px; gap: 6px; font-size: var(--text-sm); line-height: 1.25; text-align: center; white-space: normal;"><i class="ph ph-calendar-plus" style="font-size: 24px; color: var(--color-accent-text);" aria-hidden="true"></i>Programar seguimiento</button>
+              <button class="btn btn-secondary" onClick="{{ goVenta }}" style="flex-direction: column; min-height: 80px; padding: 10px 6px; gap: 6px; font-size: var(--text-sm); line-height: 1.25; text-align: center; white-space: normal;"><i class="ph ph-currency-eur" style="font-size: 24px; color: var(--color-accent-text);" aria-hidden="true"></i>Registrar venta</button>
+            </section>
+
+            <section aria-labelledby="h-seg" style="display: grid; gap: 8px;">
+              <h2 id="h-seg" style="display: flex; align-items: baseline; gap: 8px; font-size: var(--text-lg);">Seguimientos pendientes<span class="tabular text-subtle" style="font-size: var(--text-sm); font-weight: 500;">{{ client.pendingCount }}</span></h2>
+              <sc-for list="{{ client.pending }}" as="p" hint-placeholder-count="2">
+                <div style="display: flex; align-items: center; gap: 12px; min-height: 64px; padding: 8px 12px 8px 16px; background: var(--color-surface); border-radius: var(--radius-md); box-shadow: var(--shadow-sm);">
+                  <i class="ph ph-{{ p.metaIcon }}" style="font-size: 20px; color: {{ p.metaColor }};" aria-hidden="true"></i>
+                  <div style="flex: 1; min-width: 0;">
+                    <div>{{ p.title }}</div>
+                    <div style="font-size: var(--text-sm); color: {{ p.metaColor }};">{{ p.whenFull }}</div>
+                    <div style="display: flex; align-items: center; gap: 6px; font-size: var(--text-sm); color: var(--color-text-muted);"><span class="avatar" aria-hidden="true" style="width: 20px; height: 20px; font-size: 10px;">{{ p.ownerInitials }}</span>Responsable: {{ p.ownerName }}</div>
+                  </div>
+                  <button class="btn btn-secondary" aria-label="{{ p.toggleLabel }}" onClick="{{ p.onToggle }}" style="flex: none;"><i class="ph ph-check" aria-hidden="true"></i>Hecho</button>
+                </div>
+              </sc-for>
+              <sc-if value="{{ client.noPending }}">
+                <div style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; border: 1px dashed var(--color-border-strong); border-radius: var(--radius-md);">
+                  <span class="text-muted" style="flex: 1;">No hay seguimientos pendientes.</span>
+                  <button class="btn btn-ghost" onClick="{{ goSeguimiento }}"><i class="ph ph-plus" aria-hidden="true"></i>Programar</button>
+                </div>
+              </sc-if>
+            </section>
+
+            <section aria-labelledby="h-hist" style="display: grid; gap: 12px;">
+              <div style="display: flex; align-items: baseline; gap: 12px;">
+                <h2 id="h-hist" style="flex: 1; font-size: var(--text-lg);">Historial</h2>
+                <sc-if value="{{ client.hasOpen }}"><span class="text-muted" style="font-size: var(--text-sm);">Abierto <span class="tabular" style="color: var(--color-text); font-weight: 500;">{{ client.openTotal }}</span></span></sc-if>
+                <sc-if value="{{ client.hasSales }}"><span class="text-muted" style="font-size: var(--text-sm);">Ganado <span class="tabular" style="color: var(--color-text); font-weight: 500;">{{ client.salesTotal }}</span></span></sc-if>
+              </div>
+              <sc-for list="{{ client.historyDays }}" as="day" hint-placeholder-count="2">
+                <div style="display: grid; gap: 4px;">
+                  <h3 style="font-family: var(--font-sans); font-size: var(--text-sm); font-weight: 500; letter-spacing: 0; color: var(--color-text-subtle); padding: 4px 0;">{{ day.label }}</h3>
+                  <ol style="list-style: none; margin: 0; padding: 0; display: grid;">
+                    <sc-for list="{{ day.items }}" as="h" hint-placeholder-count="2">
+                      <li style="display: grid; grid-template-columns: 36px minmax(0, 1fr) auto; gap: 12px; padding: 8px 0;">
+                        <span style="width: 36px; height: 36px; display: grid; place-items: center; border-radius: 50%; background: {{ h.iconBg }}; color: {{ h.iconColor }};"><i class="ph ph-{{ h.icon }}" style="font-size: 18px;" aria-hidden="true"></i></span>
+                        <div style="min-width: 0; padding-top: 6px;">
+                          <div style="text-wrap: pretty;">{{ h.title }}</div>
+                          <div class="text-subtle" style="font-size: var(--text-sm);">{{ h.sub }}</div>
+                        </div>
+                        <sc-if value="{{ h.isSale }}">
+                          <div style="display: grid; justify-items: end; gap: 4px; padding-top: 6px;">
+                            <span class="tabular" style="font-weight: 600;">{{ h.amount }}</span>
+                            <span class="tag tag-sm tag-{{ h.statusTone }}"><i class="ph ph-{{ h.statusIcon }}" aria-hidden="true"></i>{{ h.statusLabel }}</span>
+                          </div>
+                        </sc-if>
+                      </li>
+                    </sc-for>
+                  </ol>
+                </div>
+              </sc-for>
+              <sc-if value="{{ client.noHistory }}"><div class="text-muted">Sin historial todavía. Anota la primera interacción.</div></sc-if>
+            </section>
+          </article>
+        </sc-if>
+
+        <sc-if value="{{ showNuevo }}">
+          <div data-screen-label="Nuevo cliente" style="max-width: 560px; padding: 0 16px 120px;">
+            <header class="safe-top" style="display: flex; align-items: center; gap: 8px; padding-top: 16px; padding-bottom: 16px;">
+              <button class="btn btn-icon btn-lg btn-ghost" aria-label="Cancelar" title="Cancelar" onClick="{{ goClientes }}"><i class="ph ph-arrow-left" aria-hidden="true"></i></button>
+              <h1 style="font-size: var(--text-xl);">Nuevo cliente</h1>
+            </header>
+            <form noValidate onSubmit="{{ saveClient }}" style="display: grid; gap: 20px;">
+              <sc-if value="{{ hasErrors }}">
+                <div class="banner" role="alert" style="background: var(--color-danger-bg); color: var(--color-danger-fg);"><i class="ph ph-warning-circle" aria-hidden="true"></i><span>{{ errorSummary }}</span></div>
+              </sc-if>
+              <div class="field">
+                <label for="f-name" style="display: flex; justify-content: space-between;">Nombre<span class="text-subtle" style="font-weight: 400;">Obligatorio</span></label>
+                <input id="f-name" class="input" autoComplete="name" placeholder="Ej. Lucía Ortega" value="{{ form.name }}" onChange="{{ onName }}" aria-invalid="{{ err.nameInvalid }}" aria-required="true">
+                <sc-if value="{{ err.name }}"><span class="field-error"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ err.name }}</span></sc-if>
+              </div>
+              <div class="field">
+                <label for="f-company" style="display: flex; justify-content: space-between;">Empresa<span class="text-subtle" style="font-weight: 400;">Opcional</span></label>
+                <input id="f-company" class="input" autoComplete="organization" placeholder="Ej. Estudio Brisa" value="{{ form.company }}" onChange="{{ onCompany }}">
+              </div>
+              <div class="field">
+                <label for="f-phone" style="display: flex; justify-content: space-between;">Teléfono<span class="text-subtle" style="font-weight: 400;">Opcional</span></label>
+                <input id="f-phone" class="input tabular" type="tel" inputMode="tel" autoComplete="tel" placeholder="+34 600 000 000" value="{{ form.phone }}" onChange="{{ onPhone }}" aria-invalid="{{ err.phoneInvalid }}">
+                <sc-if value="{{ err.phone }}"><span class="field-error"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ err.phone }}</span></sc-if>
+                <sc-if value="{{ err.phoneOk }}"><span class="field-help">Con prefijo si es de fuera de España.</span></sc-if>
+              </div>
+              <div class="field">
+                <label for="f-email" style="display: flex; justify-content: space-between;">Email<span class="text-subtle" style="font-weight: 400;">Opcional</span></label>
+                <input id="f-email" class="input" type="email" inputMode="email" autoComplete="email" placeholder="nombre@empresa.com" value="{{ form.email }}" onChange="{{ onEmail }}" aria-invalid="{{ err.emailInvalid }}">
+                <sc-if value="{{ err.email }}"><span class="field-error"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ err.email }}</span></sc-if>
+              </div>
+              <div class="field">
+                <span class="field-label" id="f-origin-label">Canal de origen</span>
+                <div class="seg" role="radiogroup" aria-labelledby="f-origin-label" style="display: flex;">
+                  <sc-for list="{{ originOpts }}" as="o" hint-placeholder-count="3">
+                    <label class="seg-opt" style="flex: 1; justify-content: center; min-height: 48px;"><input type="radio" name="origen" value="{{ o.value }}" checked="{{ o.checked }}" onChange="{{ o.onPick }}"><i class="ph ph-{{ o.icon }}" aria-hidden="true"></i>{{ o.label }}</label>
+                  </sc-for>
+                </div>
+                <sc-if value="{{ err.origin }}"><span class="field-error"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ err.origin }}</span></sc-if>
+              </div>
+              <div class="field">
+                <label for="f-note" style="display: flex; justify-content: space-between;">Nota<span class="text-subtle tabular" style="font-weight: 400;">{{ noteCount }}</span></label>
+                <textarea id="f-note" class="input" rows="4" maxLength="500" placeholder="Qué necesita, presupuesto, cuándo llamar…" value="{{ form.note }}" onChange="{{ onNote }}"></textarea>
+              </div>
+              <div style="display: grid; gap: 8px;">
+                <button type="submit" class="btn btn-primary btn-lg btn-block" aria-busy="{{ saving }}" disabled="{{ saving }}"><i class="ph {{ saveIcon }}" aria-hidden="true"></i>{{ saveLabel }}</button>
+                <button type="button" class="btn btn-ghost btn-lg btn-block" onClick="{{ goClientes }}">Cancelar</button>
+              </div>
+            </form>
+          </div>
+        </sc-if>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ showCuenta }}">
+      <section data-screen-label="Mi cuenta" style="flex: 1; min-width: 0; overflow-y: auto;">
+        <div style="max-width: 560px; margin: 0 auto; padding: 0 16px 120px; display: grid; gap: 24px;">
+          <header class="safe-top" style="display: grid; gap: 16px; padding-top: 24px;">
+            <h1 style="font-size: var(--text-2xl);">Mi cuenta</h1>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span class="avatar" aria-hidden="true" style="width: 56px; height: 56px; font-size: var(--text-lg);">{{ me.initials }}</span>
+              <div style="flex: 1; min-width: 0; display: grid; gap: 4px;">
+                <div style="font-size: var(--text-lg); font-weight: 500; overflow-wrap: anywhere;">{{ me.full }}</div>
+                <div class="text-muted" style="font-size: var(--text-sm); overflow-wrap: anywhere;">{{ me.email }}</div>
+                <span class="tag tag-sm tag-{{ me.roleTone }}" style="justify-self: start;"><i class="ph ph-{{ me.roleIcon }}" aria-hidden="true"></i>{{ me.roleLabel }}</span>
+              </div>
+            </div>
+          </header>
+          <nav aria-label="Opciones de la cuenta" style="display: grid; background: var(--color-surface); border-radius: var(--radius-md); box-shadow: var(--shadow-sm);">
+            <button onClick="{{ goCuentaDatos }}" style="display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 0 16px; border: 0; border-bottom: 1px solid var(--color-border); background: none; font: inherit; color: var(--color-text); text-align: left; cursor: pointer;"><i class="ph ph-user-circle text-subtle" style="font-size: 22px;" aria-hidden="true"></i><span style="flex: 1;">Editar mis datos</span><i class="ph ph-caret-right text-subtle" aria-hidden="true"></i></button>
+            <button onClick="{{ goCuentaPass }}" style="display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 0 16px; border: 0; border-bottom: 1px solid var(--color-border); background: none; font: inherit; color: var(--color-text); text-align: left; cursor: pointer;"><i class="ph ph-key text-subtle" style="font-size: 22px;" aria-hidden="true"></i><span style="flex: 1;">Cambiar contraseña</span><i class="ph ph-caret-right text-subtle" aria-hidden="true"></i></button>
+            <sc-if value="{{ canManage }}">
+              <button onClick="{{ goEquipo }}" style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; min-height: 56px; padding: 8px 16px; border: 0; border-bottom: 1px solid var(--color-border); background: none; font: inherit; color: var(--color-text); text-align: left; cursor: pointer;"><i class="ph ph-users-three text-subtle" style="font-size: 22px;" aria-hidden="true"></i><span style="flex: 1;">Gestión de usuarios</span><span class="text-subtle tabular" style="font-size: var(--text-sm);">{{ userCount }}</span><i class="ph ph-caret-right text-subtle" aria-hidden="true"></i></button>
+            </sc-if>
+            <button onClick="{{ askLogout }}" style="display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 0 16px; border: 0; background: none; font: inherit; color: var(--color-danger-fg); text-align: left; cursor: pointer; border-radius: 0 0 var(--radius-md) var(--radius-md);"><i class="ph ph-sign-out" style="font-size: 22px;" aria-hidden="true"></i><span style="flex: 1;">Cerrar sesión</span></button>
+          </nav>
+          <sc-if value="{{ devNotes }}">
+            <div style="display: flex; align-items: flex-start; gap: 8px; padding: 8px 12px; border: 1px dashed var(--color-accent); border-radius: var(--radius-md); color: var(--color-accent-text); font-size: var(--text-xs); font-family: ui-monospace, SFMono-Regular, Menlo, monospace;"><i class="ph ph-shield-check" style="font-size: 16px;" aria-hidden="true"></i><span>Control de rol n.º 1 · la opción «Gestión de usuarios» solo se pinta si canManageUsers(sesión) → role === 'duena'. Ahora: {{ me.roleCheck }}</span></div>
+          </sc-if>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ showCuentaDatos }}">
+      <section data-screen-label="Editar mis datos" style="flex: 1; min-width: 0; overflow-y: auto;">
+        <div style="max-width: 560px; margin: 0 auto; padding: 0 16px 120px;">
+          <header class="safe-top" style="display: flex; align-items: center; gap: 8px; padding-top: 16px; padding-bottom: 16px;">
+            <button class="btn btn-icon btn-lg btn-ghost" aria-label="Volver a Mi cuenta" title="Volver" onClick="{{ goCuenta }}"><i class="ph ph-arrow-left" aria-hidden="true"></i></button>
+            <h1 style="font-size: var(--text-xl);">Editar mis datos</h1>
+          </header>
+          <form noValidate onSubmit="{{ saveProfile }}" style="display: grid; gap: 20px;">
+            <div class="field">
+              <label for="p-name">Nombre y apellidos</label>
+              <input id="p-name" class="input" autoComplete="name" value="{{ pForm.full }}" onChange="{{ onPName }}" aria-invalid="{{ pErr.fullInvalid }}">
+              <sc-if value="{{ pErr.full }}"><span class="field-error"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ pErr.full }}</span></sc-if>
+            </div>
+            <div class="field">
+              <label for="p-email">Email</label>
+              <input id="p-email" class="input" type="email" inputMode="email" autoComplete="email" autoCapitalize="none" value="{{ pForm.email }}" onChange="{{ onPEmail }}" aria-invalid="{{ pErr.emailInvalid }}">
+              <sc-if value="{{ pErr.email }}"><span class="field-error"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ pErr.email }}</span></sc-if>
+              <sc-if value="{{ pErr.emailOk }}"><span class="field-help">Es el email con el que entras al CRM.</span></sc-if>
+            </div>
+            <div class="field">
+              <span class="field-label">Rol</span>
+              <div style="display: flex; align-items: center; gap: 8px; min-height: 48px;"><span class="tag tag-{{ me.roleTone }}"><i class="ph ph-{{ me.roleIcon }}" aria-hidden="true"></i>{{ me.roleLabel }}</span><span class="text-subtle" style="font-size: var(--text-sm);">Solo la dueña puede cambiarlo.</span></div>
+            </div>
+            <div style="display: grid; gap: 8px;">
+              <button type="submit" class="btn btn-primary btn-lg btn-block"><i class="ph ph-floppy-disk" aria-hidden="true"></i>Guardar cambios</button>
+              <button type="button" class="btn btn-ghost btn-lg btn-block" onClick="{{ goCuenta }}">Cancelar</button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ showCuentaPass }}">
+      <section data-screen-label="Cambiar contraseña" style="flex: 1; min-width: 0; overflow-y: auto;">
+        <div style="max-width: 560px; margin: 0 auto; padding: 0 16px 120px;">
+          <header class="safe-top" style="display: flex; align-items: center; gap: 8px; padding-top: 16px; padding-bottom: 16px;">
+            <button class="btn btn-icon btn-lg btn-ghost" aria-label="Volver a Mi cuenta" title="Volver" onClick="{{ goCuenta }}"><i class="ph ph-arrow-left" aria-hidden="true"></i></button>
+            <h1 style="font-size: var(--text-xl);">Cambiar contraseña</h1>
+          </header>
+          <form noValidate onSubmit="{{ savePassword }}" style="display: grid; gap: 20px;">
+            <div class="field">
+              <label for="c-current">Contraseña actual</label>
+              <input id="c-current" class="input" type="{{ cPwType }}" autoComplete="current-password" value="{{ cForm.current }}" onChange="{{ onCCurrent }}" aria-invalid="{{ cErr.currentInvalid }}">
+              <sc-if value="{{ cErr.current }}"><span class="field-error"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ cErr.current }}</span></sc-if>
+            </div>
+            <div class="field">
+              <label for="c-next">Nueva contraseña</label>
+              <input id="c-next" class="input" type="{{ cPwType }}" autoComplete="new-password" value="{{ cForm.next }}" onChange="{{ onCNext }}" aria-invalid="{{ cErr.nextInvalid }}">
+              <sc-if value="{{ cErr.next }}"><span class="field-error"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ cErr.next }}</span></sc-if>
+              <sc-if value="{{ cErr.nextOk }}"><span class="field-help">Mínimo 8 caracteres.</span></sc-if>
+            </div>
+            <div class="field">
+              <label for="c-repeat">Repetir nueva contraseña</label>
+              <input id="c-repeat" class="input" type="{{ cPwType }}" autoComplete="new-password" value="{{ cForm.repeat }}" onChange="{{ onCRepeat }}" aria-invalid="{{ cErr.repeatInvalid }}">
+              <sc-if value="{{ cErr.repeat }}"><span class="field-error"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ cErr.repeat }}</span></sc-if>
+            </div>
+            <label style="display: flex; align-items: center; gap: 12px; min-height: 48px; cursor: pointer;"><input type="checkbox" checked="{{ cForm.show }}" onChange="{{ toggleCShow }}" style="width: 20px; height: 20px; margin: 0; accent-color: var(--color-accent);">Mostrar contraseñas</label>
+            <div style="display: grid; gap: 8px;">
+              <button type="submit" class="btn btn-primary btn-lg btn-block"><i class="ph ph-key" aria-hidden="true"></i>Cambiar contraseña</button>
+              <button type="button" class="btn btn-ghost btn-lg btn-block" onClick="{{ goCuenta }}">Cancelar</button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ showEquipo }}">
+      <section data-screen-label="Usuarios y roles" style="flex: 1; min-width: 0; overflow-y: auto;">
+        <div style="max-width: 720px; margin: 0 auto; padding: 0 16px 120px; display: grid; gap: 16px;">
+          <header class="safe-top" style="display: grid; gap: 8px; padding-top: 16px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <button class="btn btn-icon btn-lg btn-ghost" aria-label="Volver a Mi cuenta" title="Volver" onClick="{{ goCuenta }}"><i class="ph ph-arrow-left" aria-hidden="true"></i></button>
+              <h1 style="flex: 1; font-size: var(--text-xl);">Usuarios y roles</h1>
+              <span class="text-muted tabular" style="font-size: var(--text-sm);">{{ userCountLabel }}</span>
+            </div>
+            <sc-if value="{{ devNotes }}">
+              <div style="display: flex; align-items: flex-start; gap: 8px; padding: 8px 12px; border: 1px dashed var(--color-accent); border-radius: var(--radius-md); color: var(--color-accent-text); font-size: var(--text-xs); font-family: ui-monospace, SFMono-Regular, Menlo, monospace;"><i class="ph ph-shield-check" style="font-size: 16px;" aria-hidden="true"></i><span>Control de rol n.º 2 · guarda de la ruta /equipo: requireRole('duena') antes de pintar la pantalla. Sin ese rol se muestra «Acceso restringido». En producción, repetir la comprobación en el servidor.</span></div>
+            </sc-if>
+          </header>
+          <ul style="list-style: none; margin: 0; padding: 0; display: grid; background: var(--color-surface); border-radius: var(--radius-md); box-shadow: var(--shadow-sm);">
+            <sc-for list="{{ teamRows }}" as="u" hint-placeholder-count="4">
+              <li style="display: flex; align-items: center; gap: 12px; min-height: 72px; padding: 12px 12px 12px 16px; border-bottom: 1px solid var(--color-border);">
+                <span class="avatar" aria-hidden="true" style="width: 40px; height: 40px; font-size: var(--text-sm);">{{ u.initials }}</span>
+                <div style="flex: 1; min-width: 0; display: grid; gap: 4px;">
+                  <div style="font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ u.displayName }}</div>
+                  <div class="text-muted" style="font-size: var(--text-sm); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ u.email }}</div>
+                  <span class="tag tag-sm tag-{{ u.roleTone }}" style="justify-self: start;"><i class="ph ph-{{ u.roleIcon }}" aria-hidden="true"></i>{{ u.roleLabel }}</span>
+                </div>
+                <sc-if value="{{ u.canDelete }}">
+                  <button class="btn btn-icon btn-lg btn-danger" aria-label="{{ u.deleteLabel }}" title="Eliminar" onClick="{{ u.onDelete }}" style="border-color: transparent;"><i class="ph ph-trash" aria-hidden="true"></i></button>
+                </sc-if>
+                <sc-if value="{{ u.lockReason }}">
+                  <span class="text-subtle" title="{{ u.lockReason }}" style="width: 48px; display: grid; place-items: center;"><i class="ph ph-lock-simple" style="font-size: 20px;" aria-label="{{ u.lockReason }}"></i></span>
+                </sc-if>
+              </li>
+            </sc-for>
+          </ul>
+          <p class="text-subtle" style="margin: 0; font-size: var(--text-sm);">No puedes eliminarte a ti misma. Los seguimientos pendientes de un usuario eliminado pasan a ti.</p>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ showForbidden }}">
+      <section data-screen-label="Acceso restringido" style="flex: 1; display: grid; place-items: center; padding: 24px;">
+        <div style="display: grid; justify-items: start; gap: 12px; max-width: 380px;">
+          <span class="tag tag-danger"><i class="ph ph-lock-simple" aria-hidden="true"></i>Acceso restringido</span>
+          <h1 style="font-size: var(--text-2xl);">Esta pantalla es solo para la dueña</h1>
+          <p class="text-muted" style="margin: 0;">La gestión de usuarios y roles la hace quien tiene el rol Dueña. Tu rol es {{ me.roleLabel }}.</p>
+          <sc-if value="{{ devNotes }}">
+            <span style="display: inline-flex; align-items: center; gap: 6px; padding: 2px 8px; border: 1px dashed var(--color-accent); border-radius: var(--radius-sm); color: var(--color-accent-text); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: var(--text-xs);"><i class="ph ph-shield-check" aria-hidden="true"></i>requireRole('duena') → denegado</span>
+          </sc-if>
+          <button class="btn btn-primary btn-lg" onClick="{{ goHoy }}"><i class="ph ph-sun-horizon" aria-hidden="true"></i>Volver a Hoy</button>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ show404 }}">
+      <section data-screen-label="404" style="flex: 1; display: grid; place-items: center; padding: 24px;">
+        <div style="display: grid; justify-items: start; gap: 12px; max-width: 360px;">
+          <span class="tag tag-neutral tabular">404</span>
+          <h1 style="font-size: var(--text-2xl);">Página no encontrada</h1>
+          <p class="text-muted" style="margin: 0;">La dirección no existe o el cliente se ha eliminado.</p>
+          <button class="btn btn-primary btn-lg" onClick="{{ goHoy }}"><i class="ph ph-sun-horizon" aria-hidden="true"></i>Volver a Hoy</button>
+        </div>
+      </section>
+    </sc-if>
+  </main>
+
+  <sc-if value="{{ showBottomNav }}" hint-placeholder-val="{{ true }}">
+    <nav class="bottom-nav" aria-label="Principal" style="flex: none; position: relative; z-index: 30;">
+      <button class="bottom-nav-item" aria-current="{{ hoyCurrent }}" onClick="{{ goHoy }}"><i class="ph ph-sun-horizon" aria-hidden="true"></i>Hoy</button>
+      <button class="bottom-nav-item" aria-current="{{ clientesCurrent }}" onClick="{{ goClientes }}"><i class="ph ph-users" aria-hidden="true"></i>Clientes</button>
+    </nav>
+  </sc-if>
+
+  <sc-if value="{{ showTaskSheet }}">
+    <div onClick="{{ goHoy }}" style="position: fixed; inset: 0; z-index: 40; background: color-mix(in srgb, #0b0c14 60%, transparent);"></div>
+    <div role="dialog" aria-modal="true" aria-label="Detalle de seguimiento" data-screen-label="Tarea" style="position: fixed; left: 0; right: 0; bottom: 0; z-index: 41; max-height: 85dvh; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; padding: 12px 16px max(16px, env(safe-area-inset-bottom)); background: var(--color-surface-2); border-radius: var(--radius-lg) var(--radius-lg) 0 0; box-shadow: var(--shadow-lg);">
+      <div style="width: 36px; height: 4px; border-radius: 2px; background: var(--color-border-strong); align-self: center;"></div>
+      <div style="display: flex; align-items: flex-start; gap: 8px;">
+        <h2 style="flex: 1; font-size: var(--text-xl);">{{ task.title }}</h2>
+        <button class="btn btn-icon btn-lg btn-ghost" aria-label="Cerrar" title="Cerrar" onClick="{{ goHoy }}"><i class="ph ph-x" aria-hidden="true"></i></button>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px; color: {{ task.metaColor }};"><i class="ph ph-{{ task.metaIcon }}" aria-hidden="true"></i>{{ task.whenFull }}</div>
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px;"><span class="avatar" aria-hidden="true">{{ task.ownerInitials }}</span><span><span class="text-muted">Responsable:</span> {{ task.ownerName }}</span><span class="text-subtle" style="font-size: var(--text-sm); margin-left: auto;">Creado por {{ task.createdByName }}</span></div>
+      <button class="contact-row" onClick="{{ task.openClient }}" style="border: 1px solid var(--color-border); border-radius: var(--radius-md); font: inherit; text-align: left; width: 100%;">
+        <span class="logo">{{ task.initials }}</span>
+        <div style="min-width: 0;"><div class="contact-row-name">{{ task.clientName }}</div><div class="contact-row-meta">{{ task.company }}</div></div>
+        <i class="ph ph-caret-right text-subtle" aria-hidden="true"></i>
+      </button>
+      <sc-if value="{{ task.note }}"><p class="text-muted" style="margin: 0;">{{ task.note }}</p></sc-if>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+        <a class="btn btn-secondary btn-lg" href="{{ task.tel }}"><i class="ph ph-phone" aria-hidden="true"></i>Llamar</a>
+        <button class="btn btn-primary btn-lg" onClick="{{ task.onToggle }}"><i class="ph {{ task.actionIcon }}" aria-hidden="true"></i>{{ task.actionLabel }}</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ showSheet }}">
+    <div onClick="{{ closeSheet }}" style="position: fixed; inset: 0; z-index: 40; background: color-mix(in srgb, #0b0c14 60%, transparent);"></div>
+    <div role="dialog" aria-modal="true" aria-labelledby="sheet-title" data-screen-label="{{ sheetTitle }}" style="position: fixed; z-index: 41; left: {{ sheet.left }}; right: {{ sheet.right }}; top: {{ sheet.top }}; bottom: {{ sheet.bottom }}; width: {{ sheet.width }}; transform: {{ sheet.transform }}; max-height: 90dvh; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; padding: 12px 16px max(16px, env(safe-area-inset-bottom)); background: var(--color-surface-2); border-radius: {{ sheet.radius }}; box-shadow: var(--shadow-lg);">
+      <sc-if value="{{ sheet.handle }}"><div style="width: 36px; height: 4px; border-radius: 2px; background: var(--color-border-strong); align-self: center;"></div></sc-if>
+      <div style="display: flex; align-items: center; gap: 8px; padding-top: 4px;">
+        <div style="flex: 1; min-width: 0;">
+          <h2 id="sheet-title" style="font-size: var(--text-xl);">{{ sheetTitle }}</h2>
+          <div class="text-muted" style="font-size: var(--text-sm);">{{ client.name }}</div>
+        </div>
+        <button class="btn btn-icon btn-lg btn-ghost" aria-label="Cerrar" title="Cerrar" onClick="{{ closeSheet }}"><i class="ph ph-x" aria-hidden="true"></i></button>
+      </div>
+
+      <sc-if value="{{ formInteraccion }}">
+        <form noValidate onSubmit="{{ saveInteraction }}" style="display: grid; gap: 16px;">
+          <div class="field">
+            <span class="field-label" id="i-ch-label">Canal</span>
+            <div class="seg" role="radiogroup" aria-labelledby="i-ch-label" style="display: flex;">
+              <sc-for list="{{ channelOpts }}" as="o" hint-placeholder-count="4">
+                <label class="seg-opt" style="flex: 1; flex-direction: column; justify-content: center; gap: 2px; min-height: 56px; padding: 4px; font-size: var(--text-xs); text-align: center;"><input type="radio" name="canal" value="{{ o.value }}" checked="{{ o.checked }}" onChange="{{ o.onPick }}"><i class="ph ph-{{ o.icon }}" style="font-size: 20px;" aria-hidden="true"></i>{{ o.label }}</label>
+              </sc-for>
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; align-items: start;">
+            <div class="field">
+              <label for="i-date">Fecha</label>
+              <input id="i-date" class="input tabular" type="date" max="{{ todayIso }}" value="{{ iForm.date }}" onChange="{{ onIDate }}" aria-invalid="{{ iErr.dateInvalid }}">
+            </div>
+            <div class="field">
+              <span class="field-label" id="i-author-label">Autor</span>
+              <div aria-labelledby="i-author-label" title="Se registra con tu sesión" style="min-height: 48px; display: flex; align-items: center; gap: 8px; padding: 0 12px; border: 1px dashed var(--color-border-strong); border-radius: var(--radius-md); color: var(--color-text-muted);"><span class="avatar" aria-hidden="true">{{ me.initials }}</span><span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ me.name }} (tú)</span><i class="ph ph-lock-simple text-subtle" style="margin-left: auto;" aria-hidden="true"></i></div>
+            </div>
+          </div>
+          <sc-if value="{{ iErr.date }}"><span class="field-error"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ iErr.date }}</span></sc-if>
+          <div class="field">
+            <label for="i-text">Qué ha pasado</label>
+            <textarea id="i-text" class="input" rows="4" maxLength="500" placeholder="Ej. Le ha gustado la propuesta, pide plazos." value="{{ iForm.text }}" onChange="{{ onIText }}" aria-invalid="{{ iErr.textInvalid }}"></textarea>
+            <sc-if value="{{ iErr.text }}"><span class="field-error"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ iErr.text }}</span></sc-if>
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg btn-block"><i class="ph ph-floppy-disk" aria-hidden="true"></i>Guardar interacción</button>
+        </form>
+      </sc-if>
+
+      <sc-if value="{{ formSeguimiento }}">
+        <form noValidate onSubmit="{{ saveFollowup }}" style="display: grid; gap: 16px;">
+          <div class="field">
+            <label for="s-title">Qué hay que hacer</label>
+            <input id="s-title" class="input" placeholder="Ej. Llamar para cerrar el precio" value="{{ fForm.title }}" onChange="{{ onFTitle }}" aria-invalid="{{ fErr.titleInvalid }}">
+            <sc-if value="{{ fErr.title }}"><span class="field-error"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ fErr.title }}</span></sc-if>
+          </div>
+          <div class="field">
+            <span class="field-label">Cuándo</span>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+              <sc-for list="{{ dateShortcuts }}" as="d" hint-placeholder-count="3">
+                <button type="button" class="chip" aria-pressed="{{ d.selected }}" onClick="{{ d.onPick }}">{{ d.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 8px;">
+            <div class="field">
+              <label for="s-date">Fecha</label>
+              <input id="s-date" class="input tabular" type="date" min="{{ todayIso }}" value="{{ fForm.date }}" onChange="{{ onFDate }}" aria-invalid="{{ fErr.dateInvalid }}">
+            </div>
+            <div class="field">
+              <label for="s-time" style="display: flex; justify-content: space-between;">Hora<span class="text-subtle" style="font-weight: 400;">Opcional</span></label>
+              <input id="s-time" class="input tabular" type="time" value="{{ fForm.time }}" onChange="{{ onFTime }}">
+            </div>
+          </div>
+          <sc-if value="{{ fErr.date }}"><span class="field-error"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ fErr.date }}</span></sc-if>
+          <div class="field">
+            <label for="s-owner">Responsable</label>
+            <select id="s-owner" class="input" value="{{ fOwner }}" onChange="{{ onFOwner }}" style="appearance: auto;">
+              <sc-for list="{{ teamOpts }}" as="u" hint-placeholder-count="3">
+                <option value="{{ u.id }}">{{ u.optLabel }}</option>
+              </sc-for>
+            </select>
+            <span class="field-help">Lo creas tú ({{ me.name }}); puede hacerlo otra persona del equipo.</span>
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg btn-block"><i class="ph ph-calendar-check" aria-hidden="true"></i>Programar seguimiento</button>
+        </form>
+      </sc-if>
+
+      <sc-if value="{{ formVenta }}">
+        <form noValidate onSubmit="{{ saveSale }}" style="display: grid; gap: 16px;">
+          <div class="field">
+            <label for="v-concept">Qué se vende</label>
+            <input id="v-concept" class="input" placeholder="Ej. Rediseño de marca" value="{{ sForm.concept }}" onChange="{{ onSConcept }}" aria-invalid="{{ sErr.conceptInvalid }}">
+            <sc-if value="{{ sErr.concept }}"><span class="field-error"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ sErr.concept }}</span></sc-if>
+          </div>
+          <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px;">
+            <div class="field">
+              <label for="v-amount">Importe (€)</label>
+              <input id="v-amount" class="input tabular" inputMode="decimal" placeholder="0,00" value="{{ sForm.amount }}" onChange="{{ onSAmount }}" aria-invalid="{{ sErr.amountInvalid }}">
+            </div>
+            <div class="field">
+              <label for="v-date">Fecha</label>
+              <input id="v-date" class="input tabular" type="date" max="{{ todayIso }}" value="{{ sForm.date }}" onChange="{{ onSDate }}" aria-invalid="{{ sErr.dateInvalid }}">
+            </div>
+          </div>
+          <sc-if value="{{ sErr.amount }}"><span class="field-error"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ sErr.amount }}</span></sc-if>
+          <sc-if value="{{ sErr.date }}"><span class="field-error"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ sErr.date }}</span></sc-if>
+          <div class="field">
+            <span class="field-label" id="v-status-label">Estado de la oportunidad</span>
+            <div role="radiogroup" aria-labelledby="v-status-label" style="display: flex; flex-wrap: wrap; gap: 8px;">
+              <sc-for list="{{ statusOpts }}" as="o" hint-placeholder-count="3">
+                <button type="button" role="radio" class="chip" aria-checked="{{ o.checked }}" onClick="{{ o.onPick }}" style="min-height: 44px; background: {{ o.bg }}; color: {{ o.color }}; border-color: {{ o.border }};"><i class="ph ph-{{ o.icon }}" aria-hidden="true"></i>{{ o.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+          <div class="field">
+            <label for="v-manager">Gestiona</label>
+            <select id="v-manager" class="input" value="{{ sManager }}" onChange="{{ onSManager }}" style="appearance: auto;">
+              <sc-for list="{{ teamOpts }}" as="u" hint-placeholder-count="3">
+                <option value="{{ u.id }}">{{ u.optLabel }}</option>
+              </sc-for>
+            </select>
+          </div>
+          <div class="banner" style="background: var(--color-info-bg); color: var(--color-info-fg);"><i class="ph ph-info" aria-hidden="true"></i><span>Se añade al historial. El estado del cliente ({{ client.stageLabel }}) no cambia.</span></div>
+          <button type="submit" class="btn btn-primary btn-lg btn-block"><i class="ph ph-floppy-disk" aria-hidden="true"></i>Guardar</button>
+        </form>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ hasConfirm }}">
+    <div class="dialog-backdrop" onClick="{{ cancelConfirm }}">
+      <div class="dialog" role="alertdialog" aria-modal="true" aria-labelledby="cf-title" aria-describedby="cf-body" data-screen-label="Confirmación" onClick="{{ stop }}">
+        <div id="cf-title" class="dialog-title">{{ confirm.title }}</div>
+        <div id="cf-body" class="dialog-body">{{ confirm.body }}</div>
+        <sc-if value="{{ confirm.note }}"><span style="justify-self: start; display: inline-flex; align-items: center; gap: 6px; padding: 2px 8px; border: 1px dashed var(--color-accent); border-radius: var(--radius-sm); color: var(--color-accent-text); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: var(--text-xs);"><i class="ph ph-shield-check" aria-hidden="true"></i>{{ confirm.note }}</span></sc-if>
+        <div class="dialog-actions">
+          <button class="btn btn-secondary btn-lg" onClick="{{ cancelConfirm }}">Cancelar</button>
+          <button class="btn btn-danger btn-lg" onClick="{{ doConfirm }}"><i class="ph ph-{{ confirm.icon }}" aria-hidden="true"></i>{{ confirm.action }}</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ hasToast }}">
+    <div role="status" style="position: fixed; left: 0; right: 0; bottom: {{ toastBottom }}; z-index: 60; display: flex; justify-content: center; padding: 0 16px; pointer-events: none;">
+      <div class="toast" style="pointer-events: auto;">
+        <i class="ph ph-check-circle" style="color: var(--color-success-fg);" aria-hidden="true"></i>
+        <span class="toast-msg">{{ toastMsg }}</span>
+        <sc-if value="{{ hasUndo }}"><button class="btn btn-ghost btn-sm" onClick="{{ undoToast }}">Deshacer</button></sc-if>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ devNotes }}">
+    <div class="tabular" style="position: fixed; left: 8px; bottom: {{ routeBottom }}; z-index: 70; padding: 2px 8px; border-radius: var(--radius-sm); background: var(--color-surface-2); border: 1px solid var(--color-border); color: var(--color-text-subtle); font-size: var(--text-xs); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; pointer-events: none;">{{ routeLabel }}</div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;oscuro&quot;,&quot;claro&quot;],&quot;default&quot;:&quot;oscuro&quot;,&quot;tsType&quot;:&quot;'oscuro' | 'claro'&quot;},&quot;devNotes&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+const STAGES = {
+  nuevo: { tone: 'neutral', icon: 'circle-dashed', label: 'Nuevo' },
+  contactado: { tone: 'info', icon: 'chat-circle', label: 'Contactado' },
+  propuesta: { tone: 'accent', icon: 'file-text', label: 'Propuesta' },
+  negociacion: { tone: 'warning', icon: 'handshake', label: 'Negociación' },
+  ganado: { tone: 'success', icon: 'check-circle', label: 'Ganado' },
+  perdido: { tone: 'danger', icon: 'x-circle', label: 'Perdido' },
+};
+const ORIGINS = { web: { label: 'Web', icon: 'globe' }, whatsapp: { label: 'WhatsApp', icon: 'whatsapp-logo' }, email: { label: 'Email', icon: 'envelope-simple' } };
+const CHANNELS = { llamada: { label: 'Llamada', icon: 'phone' }, email: { label: 'Email', icon: 'envelope-simple' }, whatsapp: { label: 'WhatsApp', icon: 'whatsapp-logo' }, persona: { label: 'En persona', icon: 'users-three' }, reunion: { label: 'En persona', icon: 'users-three' }, nota: { label: 'Nota', icon: 'note-pencil' } };
+const ROLES = {
+  duena: { label: 'Dueña', tone: 'accent', icon: 'crown-simple' },
+  ventas: { label: 'Ventas', tone: 'info', icon: 'handshake' },
+  admin: { label: 'Administración', tone: 'neutral', icon: 'briefcase' },
+};
+const mkUser = (id, full, roleId) => ({ id, full, name: full.split(' ')[0], roleId, role: ROLES[roleId].label, initials: full.split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase(), password: 'demo1234' });
+const USERS = {
+  marta: mkUser('marta', 'Marta García', 'duena'),
+  carlos: mkUser('carlos', 'Carlos Méndez', 'ventas'),
+  irene: mkUser('irene', 'Irene Soto', 'admin'),
+  diego: mkUser('diego', 'Diego Luna', 'ventas'),
+};
+let CURRENT_USERS = USERS;
+const FORMER = {};
+// ◆ PUNTO DE CONTROL DE ROL — única función que decide el acceso a la gestión de usuarios.
+const canManageUsers = u => !!u && u.roleId === 'duena';
+Object.values(USERS).forEach(u => { u.email = u.id + '@crm.es'; });
+const DEMO_PASSWORD = 'demo1234';
+const SESSION_KEY = 'crm-app-session';
+const readSession = () => { try { const v = localStorage.getItem(SESSION_KEY) || sessionStorage.getItem(SESSION_KEY); return v && USERS[v] ? v : null; } catch (e) { return null; } };
+const writeSession = (id, remember) => { try { localStorage.removeItem(SESSION_KEY); sessionStorage.removeItem(SESSION_KEY); if (id) (remember ? localStorage : sessionStorage).setItem(SESSION_KEY, id); } catch (e) {} };
+const EMPTY_LOGIN = () => ({ email: '', password: '', show: false, remember: true });
+const userOf = id => CURRENT_USERS[(id || '').toLowerCase()] || FORMER[(id || '').toLowerCase()] || { id, name: id || '—', full: id || '—', initials: (id || '?').slice(0, 2).toUpperCase() };
+const OPP = {
+  abierta: { label: 'Abierta', tone: 'info', icon: 'circle-half' },
+  ganada: { label: 'Ganada', tone: 'success', icon: 'check-circle' },
+  perdida: { label: 'Perdida', tone: 'danger', icon: 'x-circle' },
+};
+
+const TODAY = new Date(2026, 8, 30);
+const pad = n => String(n).padStart(2, '0');
+const iso = d => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+const day = n => { const d = new Date(TODAY); d.setDate(d.getDate() + n); return iso(d); };
+const TODAY_S = day(0);
+const ago = (n, hm) => day(-n) + 'T' + hm;
+const daysAgo = s => Math.round((new Date(TODAY_S + 'T00:00') - new Date(s.slice(0, 10) + 'T00:00')) / 864e5);
+const MES = new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'short' });
+const LARGA = new Intl.DateTimeFormat('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
+const dayLabel = s => { const k = daysAgo(s); if (k === 0) return 'Hoy'; if (k === 1) return 'Ayer'; if (k === -1) return 'Mañana'; return MES.format(new Date(s.slice(0, 10) + 'T12:00')).replace('.', ''); };
+const nowHM = () => { const d = new Date(); return pad(d.getHours()) + ':' + pad(d.getMinutes()); };
+const eur = n => new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', minimumFractionDigits: 0, maximumFractionDigits: 2 }).format(n);
+const initials = s => (s || '').split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase();
+const norm = s => (s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+const readHash = () => (location.hash.replace(/^#/, '') || '/');
+const parseAmount = s => { const t = (s || '').replace(/\s|€/g, '').replace(/\.(?=\d{3}(\D|$))/g, '').replace(',', '.'); return /^\d+(\.\d{1,2})?$/.test(t) ? Number(t) : NaN; };
+let seq = 100;
+const I = (n, hm, channel, text, who) => ({ id: 'h' + (seq++), kind: 'interaccion', ts: ago(n, hm), channel: channel === 'reunion' ? 'persona' : channel, text, who: who.toLowerCase() });
+const V = (n, hm, concept, amount, who, status = 'ganada') => ({ id: 'h' + (seq++), kind: 'venta', ts: ago(n, hm), concept, amount, who: who.toLowerCase(), status });
+
+const CLIENTS = [
+  { id: 'lucia-ortega', name: 'Lucía Ortega', company: 'Estudio Brisa', stage: 'propuesta', phone: '+34 612 345 678', email: 'lucia@estudiobrisa.com', origin: 'web',
+    history: [I(0, '10:05', 'email', 'Enviada la propuesta de marca en PDF', 'Carlos'), I(1, '17:20', 'llamada', 'Llamada de 6 min. Quiere ver dos opciones de logo', 'Marta'), V(40, '12:00', 'Tarjetas de visita', 180, 'Marta')] },
+  { id: 'ana-ruiz', name: 'Ana Ruiz', company: 'Tienda Olivo', stage: 'negociacion', phone: '+34 622 111 222', email: 'ana@tiendaolivo.es', origin: 'whatsapp',
+    history: [V(3, '11:05', 'Web + tienda online', 3200, 'Carlos', 'abierta'), V(20, '10:00', 'Sesión de fotos de producto', 350, 'Carlos', 'perdida'), I(0, '09:40', 'whatsapp', 'Pide un 10 % de descuento en la web', 'Carlos'), I(3, '11:00', 'email', 'Presupuesto revisado enviado', 'Marta'), I(10, '18:00', 'reunion', 'Reunión en la tienda para ver necesidades', 'Carlos')] },
+  { id: 'javier-molina', name: 'Javier Molina', company: 'Molina Fitness', stage: 'contactado', phone: '+34 633 444 555', email: 'javi@molinafit.com', origin: 'whatsapp',
+    history: [I(0, '08:15', 'whatsapp', 'Pregunta si incluimos Instagram y TikTok', 'Carlos'), I(1, '13:30', 'llamada', 'Primer contacto, 4 min', 'Carlos')] },
+  { id: 'pablo-sanz', name: 'Pablo Sanz', company: 'Sanz Consultores', stage: 'nuevo', phone: '+34 644 777 888', email: 'pablo@sanz.es', origin: 'web', history: [] },
+  { id: 'elena-castro', name: 'Elena Castro', company: 'Castro Abogados', stage: 'ganado', phone: '+34 655 222 333', email: 'elena@castroabogados.es', origin: 'email',
+    history: [I(7, '10:00', 'email', 'Factura de agosto preparada en borrador', 'Marta'), V(33, '12:00', 'Web corporativa', 1800, 'Marta'), I(33, '11:00', 'reunion', 'Firma del contrato en su despacho', 'Marta')] },
+  { id: 'marcos-vidal', name: 'Marcos Vidal', company: 'Panadería Vidal', stage: 'contactado', phone: '+34 666 101 202', email: 'marcos@panaderiavidal.es', origin: 'whatsapp',
+    history: [I(2, '16:45', 'llamada', 'Llamada de 3 min. Espera fechas para las fotos', 'Carlos'), V(90, '10:00', 'Fotos de temporada', 450, 'Carlos')] },
+  { id: 'sofia-navarro', name: 'Sofía Navarro', company: 'Navarro Interiores', stage: 'propuesta', phone: '+34 677 303 404', email: 'sofia@navarrointeriores.com', origin: 'email',
+    history: [I(1, '19:10', 'nota', 'Quiere quitar la sección de blog del catálogo', 'Marta'), I(5, '09:30', 'email', 'Propuesta de catálogo online enviada', 'Marta')] },
+];
+const TASKS = [
+  { id: 't1', title: 'Enviar factura de agosto', client: 'elena-castro', date: day(-1), time: '', done: false, note: 'La factura está en borrador. Revisa el importe antes de enviarla.' },
+  { id: 't2', title: 'Llamar a Ana para cerrar precio', client: 'ana-ruiz', date: day(0), time: '12:00', done: false, note: 'Pidió un 10 % de descuento. Ofrecer el mantenimiento anual incluido.' },
+  { id: 't3', title: 'Enviar propuesta revisada', client: 'sofia-navarro', date: day(0), time: '16:00', done: false, note: 'Sin la sección de blog. Ajustar el importe.' },
+  { id: 't4', title: 'Confirmar reunión del jueves', client: 'lucia-ortega', date: day(0), time: '17:30', done: false, note: 'Reunión para revisar la propuesta de marca.' },
+  { id: 't5', title: 'Primer contacto con Pablo', client: 'pablo-sanz', date: day(0), time: '', done: false, note: 'Entró por el formulario de la web. Preguntar presupuesto y plazos.' },
+  { id: 't6', title: 'Responder WhatsApp de Javier', client: 'javier-molina', date: day(0), time: '08:15', done: true, note: '' },
+  { id: 't7', title: 'Llamar para saber qué opina del catálogo', client: 'sofia-navarro', date: day(2), time: '10:00', done: false, note: '' },
+  { id: 't8', title: 'Confirmar fechas de la sesión de fotos', client: 'marcos-vidal', date: day(7), time: '', done: false, note: '' },
+];
+const OWNERS = { t1: ['marta', 'marta'], t2: ['carlos', 'marta'], t3: ['marta', 'marta'], t4: ['carlos', 'carlos'], t5: ['carlos', 'marta'], t6: ['carlos', 'carlos'], t7: ['irene', 'marta'], t8: ['carlos', 'carlos'] };
+TASKS.forEach(t => { t.owner = OWNERS[t.id][0]; t.createdBy = OWNERS[t.id][1]; });
+const EMPTY_FORM = { name: '', company: '', phone: '', email: '', origin: '', note: '' };
+const EMPTY_I = () => ({ channel: 'llamada', text: '', date: day(0) });
+const EMPTY_F = () => ({ title: '', date: day(1), time: '', owner: '' });
+const EMPTY_S = () => ({ concept: '', amount: '', date: day(0), status: 'abierta', manager: '' });
+const FORM_FOCUS = { interaccion: 'i-text', seguimiento: 's-title', venta: 'v-concept' };
+const FORM_TITLES = { interaccion: 'Anotar interacción', seguimiento: 'Programar seguimiento', venta: 'Registrar venta u oportunidad' };
+
+class Component extends DCLogic {
+  state = { path: readHash(), w: window.innerWidth, clients: CLIENTS, tasks: TASKS, q: '', stage: 'todos', form: { ...EMPTY_FORM }, tried: false, saving: false, toast: null,
+    users: USERS, confirm: null, pForm: null, pTried: false, cForm: { current: '', next: '', repeat: '', show: false }, cTried: false,
+    session: readSession(), login: EMPTY_LOGIN(), loginTried: false, loginError: '', loggingIn: false, accountOpen: false,
+    iForm: EMPTY_I(), fForm: EMPTY_F(), sForm: EMPTY_S(), triedI: false, triedF: false, triedS: false };
+
+  componentDidMount() {
+    this.onHash = () => { this.setState({ path: readHash() }); this.fixRoot(); };
+    this.onResize = () => this.setState({ w: window.innerWidth });
+    this.onKey = e => { if (e.key !== 'Escape') return; if (this.state.confirm) { this.setState({ confirm: null }); return; } const r = this.route(); if (r.form) this.nav('/clientes/' + r.clientId); else if (r.taskId) this.nav('/hoy'); };
+    window.addEventListener('hashchange', this.onHash);
+    window.addEventListener('resize', this.onResize);
+    window.addEventListener('keydown', this.onKey);
+    this.fixRoot();
+  }
+  componentWillUnmount() {
+    window.removeEventListener('hashchange', this.onHash);
+    window.removeEventListener('resize', this.onResize);
+    window.removeEventListener('keydown', this.onKey);
+    clearTimeout(this.tt);
+  }
+  componentDidUpdate() {
+    const f = this.route().form || null;
+    if (f !== this.lastForm) { this.lastForm = f; if (f) setTimeout(() => { const el = document.getElementById(FORM_FOCUS[f]); el && el.focus(); }, 60); }
+  }
+  authed() { const us = (this.state && this.state.users) || USERS; return !!(this.state && this.state.session && us[this.state.session]); }
+  saveProfile(ev) {
+    ev && ev.preventDefault && ev.preventDefault();
+    const me = this.me(), f = this.state.pForm || { full: me.full, email: me.email }, e = this.validateP(f);
+    if (Object.keys(e).length) { this.setState({ pTried: true, pForm: f }); this.focusFirst(e, { full: 'p-name', email: 'p-email' }); return; }
+    const full = f.full.trim().replace(/\s+/g, ' ');
+    const upd = { ...me, full, name: full.split(' ')[0], email: f.email.trim().toLowerCase(), initials: initials(full) };
+    this.setState(s => ({ users: { ...s.users, [me.id]: upd }, pForm: null, pTried: false }));
+    this.nav('/cuenta');
+    this.flash('Datos guardados');
+  }
+  validateP(f) {
+    const e = {}, email = f.email.trim().toLowerCase(), me = this.me();
+    if (f.full.trim().length < 2) e.full = 'Escribe tu nombre';
+    if (!email) e.email = 'Escribe tu email';
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) e.email = 'Revisa el email, p. ej. nombre@empresa.com';
+    else if (Object.values(this.state.users).some(u => u.id !== me.id && u.email === email)) e.email = 'Otro usuario ya usa este email';
+    return e;
+  }
+  validateC(f) {
+    const e = {}, me = this.me();
+    if (!f.current) e.current = 'Escribe tu contraseña actual';
+    else if (f.current !== me.password) e.current = 'La contraseña actual no es correcta';
+    if (!f.next) e.next = 'Escribe la nueva contraseña';
+    else if (f.next.length < 8) e.next = 'Debe tener al menos 8 caracteres';
+    else if (f.next === f.current) e.next = 'Debe ser distinta de la actual';
+    if (!f.repeat) e.repeat = 'Repite la nueva contraseña';
+    else if (f.repeat !== f.next) e.repeat = 'Las contraseñas no coinciden';
+    return e;
+  }
+  savePassword(ev) {
+    ev && ev.preventDefault && ev.preventDefault();
+    const f = this.state.cForm, e = this.validateC(f);
+    if (Object.keys(e).length) { this.setState({ cTried: true }); this.focusFirst(e, { current: 'c-current', next: 'c-next', repeat: 'c-repeat' }); return; }
+    const me = this.me();
+    this.setState(s => ({ users: { ...s.users, [me.id]: { ...me, password: f.next } }, cForm: { current: '', next: '', repeat: '', show: false }, cTried: false }));
+    this.nav('/cuenta');
+    this.flash('Contraseña cambiada');
+  }
+  deleteUser(id) {
+    const me = this.me();
+    if (!canManageUsers(me) || id === me.id) return; // ◆ control de rol repetido en la acción
+    const u = this.state.users[id];
+    FORMER[id] = { ...u, name: u.name + ' (eliminado)', full: u.full + ' (eliminado)' };
+    const users = { ...this.state.users }; delete users[id];
+    this.setState(s => ({ users, confirm: null, tasks: s.tasks.map(t => t.owner === id && !t.done ? { ...t, owner: me.id } : t) }));
+    this.flash(u.full + ' eliminado');
+  }
+  fixRoot() {
+    const p = readHash(), to = !this.authed() ? (p === '/login' ? null : '/login') : (p === '/' || p === '/login' ? (this.next || '/hoy') : null);
+    if (!this.authed() && p !== '/login' && p !== '/') this.next = p;
+    if (to) { history.replaceState(null, '', '#' + to); this.setState({ path: to }); if (this.authed()) this.next = null; }
+  }
+  doLogin(ev) {
+    ev && ev.preventDefault && ev.preventDefault();
+    if (this.state.loggingIn) return;
+    const f = this.state.login, e = this.validateL(f);
+    if (Object.keys(e).length) { this.setState({ loginTried: true, loginError: '' }); this.focusFirst(e, { email: 'l-email', password: 'l-pass' }); return; }
+    this.setState({ loggingIn: true, loginError: '' });
+    setTimeout(() => {
+      const u = Object.values(this.state.users || USERS).find(x => x.email === f.email.trim().toLowerCase());
+      if (!u || f.password !== u.password) {
+        this.setState({ loggingIn: false, loginError: 'El email o la contraseña no son correctos.', login: { ...this.state.login, password: '' } });
+        setTimeout(() => { const el = document.getElementById('l-pass'); el && el.focus(); }, 0);
+        return;
+      }
+      writeSession(u.id, f.remember);
+      const to = this.next && this.next !== '/login' ? this.next : '/hoy';
+      this.next = null;
+      this.setState({ session: u.id, loggingIn: false, loginTried: false, login: EMPTY_LOGIN() });
+      history.replaceState(null, '', '#' + to);
+      this.setState({ path: to });
+      this.flash('Hola, ' + u.name);
+    }, 600);
+  }
+  logout() {
+    writeSession(null);
+    this.next = null;
+    this.setState({ session: null, confirm: null, pForm: null, cForm: { current: '', next: '', repeat: '', show: false }, pTried: false, cTried: false, iForm: EMPTY_I(), fForm: EMPTY_F(), sForm: EMPTY_S(), form: { ...EMPTY_FORM } });
+    history.replaceState(null, '', '#/login');
+    this.setState({ path: '/login' });
+    this.flash('Has cerrado la sesión');
+  }
+  validateL(f) {
+    const e = {}, email = f.email.trim();
+    if (!email) e.email = 'Escribe tu email';
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) e.email = 'Revisa el email, p. ej. nombre@empresa.com';
+    if (!f.password) e.password = 'Escribe tu contraseña';
+    else if (f.password.length < 8) e.password = 'La contraseña tiene al menos 8 caracteres';
+    return e;
+  }
+  nav(p) { if (readHash() !== p) location.hash = p; }
+  flash(msg, undo) { clearTimeout(this.tt); this.setState({ toast: { msg, undo } }); this.tt = setTimeout(() => this.setState({ toast: null }), 4000); }
+  route() { return this.parse(this.state.path, this.state.clients); }
+  parse(path, clients) {
+    const s = path.split('/').filter(Boolean);
+    if (!this.authed() || s[0] === 'login') return { tab: null, screen: 'login' };
+    if (s[0] === 'cuenta' && s.length === 1) return { tab: 'cuenta', screen: 'cuenta' };
+    if (s[0] === 'cuenta' && s[1] === 'datos' && s.length === 2) return { tab: 'cuenta', screen: 'cuentaDatos' };
+    if (s[0] === 'cuenta' && s[1] === 'contrasena' && s.length === 2) return { tab: 'cuenta', screen: 'cuentaPass' };
+    // ◆ PUNTO DE CONTROL DE ROL — guarda de ruta
+    if (s[0] === 'equipo' && s.length === 1) return canManageUsers(this.me()) ? { tab: 'cuenta', screen: 'equipo' } : { tab: 'cuenta', screen: 'forbidden' };
+    if (s[0] === 'hoy' && s.length === 1) return { tab: 'hoy', screen: 'hoy' };
+    if (s[0] === 'hoy' && s[1] === 'tarea' && s.length === 3 && this.state.tasks.some(t => t.id === s[2])) return { tab: 'hoy', screen: 'hoy', taskId: s[2] };
+    if (s[0] === 'clientes' && s.length === 1) return { tab: 'clientes', screen: 'list' };
+    if (s[0] === 'clientes' && s[1] === 'nuevo' && s.length === 2) return { tab: 'clientes', screen: 'nuevo' };
+    if (s[0] === 'clientes' && s.length <= 3 && clients.some(c => c.id === s[1])) {
+      if (!s[2]) return { tab: 'clientes', screen: 'ficha', clientId: s[1] };
+      if (FORM_TITLES[s[2]]) return { tab: 'clientes', screen: 'ficha', clientId: s[1], form: s[2] };
+    }
+    return { tab: null, screen: '404' };
+  }
+  toggleTask(id) {
+    const t = this.state.tasks.find(x => x.id === id);
+    const set = v => this.setState(s => ({ tasks: s.tasks.map(x => x.id === id ? { ...x, done: v } : x) }));
+    set(!t.done);
+    if (!t.done) this.flash('Seguimiento hecho', () => set(false));
+  }
+  addHistory(clientId, item) { this.setState(s => ({ clients: s.clients.map(c => c.id === clientId ? { ...c, history: [item, ...c.history] } : c) })); }
+
+  validate(f) {
+    const e = {};
+    const name = f.name.trim(), digits = f.phone.replace(/\D/g, ''), email = f.email.trim();
+    if (!name) e.name = 'Escribe el nombre del cliente';
+    else if (name.length < 2) e.name = 'El nombre es demasiado corto';
+    if (f.phone.trim() && (/[^\d\s+().-]/.test(f.phone) || digits.length < 9 || digits.length > 15)) e.phone = 'Revisa el teléfono: debe tener entre 9 y 15 cifras';
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) e.email = 'Revisa el email, p. ej. nombre@empresa.com';
+    else if (email && this.state.clients.some(c => c.email.toLowerCase() === email.toLowerCase())) e.email = 'Ya hay un cliente con este email';
+    if (!f.origin) e.origin = 'Elige por dónde llegó el cliente';
+    return e;
+  }
+  me() { return userOf(this.state.session || 'carlos'); }
+  validateI(f) {
+    const e = {};
+    if (!f.date) e.date = 'Elige la fecha';
+    else if (f.date > TODAY_S) e.date = 'La fecha no puede ser futura';
+    if (f.text.trim().length < 3) e.text = 'Escribe de qué habéis hablado';
+    return e;
+  }
+  validateF(f) {
+    const e = {};
+    if (!f.title.trim()) e.title = 'Escribe qué hay que hacer';
+    if (!f.date) e.date = 'Elige una fecha';
+    else if (f.date < TODAY_S) e.date = 'La fecha no puede ser anterior a hoy';
+    return e;
+  }
+  validateS(f) {
+    const e = {}, a = parseAmount(f.amount);
+    if (!f.concept.trim()) e.concept = 'Escribe qué se ha vendido';
+    if (!f.amount.trim()) e.amount = 'Escribe el importe';
+    else if (!(a > 0)) e.amount = 'Revisa el importe, p. ej. 1.200 o 350,50';
+    if (!f.date) e.date = 'Elige la fecha de la venta';
+    else if (f.date > TODAY_S) e.date = 'La fecha de la venta no puede ser futura';
+    return e;
+  }
+  focusFirst(e, map) { const k = Object.keys(e)[0]; setTimeout(() => { const el = document.getElementById(map[k]); el && el.focus(); }, 0); }
+
+  saveClient(ev) {
+    ev && ev.preventDefault && ev.preventDefault();
+    if (this.state.saving) return;
+    const f = { ...EMPTY_FORM, ...this.state.form }, e = this.validate(f);
+    if (Object.keys(e).length) {
+      this.setState({ tried: true });
+      const k = Object.keys(e)[0];
+      setTimeout(() => { const el = k === 'origin' ? document.querySelector('input[name="origen"]') : document.getElementById('f-' + k); el && el.focus(); }, 0);
+      return;
+    }
+    this.setState({ saving: true });
+    setTimeout(() => {
+      const name = f.name.trim();
+      let id = norm(name).replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'cliente';
+      if (this.state.clients.some(c => c.id === id)) id += '-' + Date.now().toString(36).slice(-4);
+      const history = f.note.trim() ? [{ id: 'h' + (seq++), kind: 'interaccion', channel: 'nota', text: f.note.trim(), who: this.me().id, ts: TODAY_S + 'T' + nowHM() }] : [];
+      const c = { id, name, company: f.company.trim(), stage: 'nuevo', phone: f.phone.trim(), email: f.email.trim(), origin: f.origin, history };
+      this.setState(s => ({ clients: [c, ...s.clients], form: { ...EMPTY_FORM }, tried: false, saving: false, stage: 'todos', q: '' }));
+      this.nav('/clientes/' + id);
+      this.flash('Cliente creado');
+    }, 500);
+  }
+  saveInteraction(ev) {
+    ev && ev.preventDefault && ev.preventDefault();
+    const r = this.route(), f = { ...EMPTY_I(), ...this.state.iForm }, e = this.validateI(f);
+    if (Object.keys(e).length) { this.setState({ triedI: true }); this.focusFirst(e, { date: 'i-date', text: 'i-text' }); return; }
+    this.addHistory(r.clientId, { id: 'h' + (seq++), kind: 'interaccion', channel: f.channel, text: f.text.trim(), who: this.me().id, ts: f.date + 'T' + (f.date === TODAY_S ? nowHM() : '12:00') });
+    this.setState({ iForm: EMPTY_I(), triedI: false });
+    this.nav('/clientes/' + r.clientId);
+    this.flash('Interacción anotada');
+  }
+  saveFollowup(ev) {
+    ev && ev.preventDefault && ev.preventDefault();
+    const r = this.route(), f = this.state.fForm, e = this.validateF(f);
+    if (Object.keys(e).length) { this.setState({ triedF: true }); this.focusFirst(e, { title: 's-title', date: 's-date' }); return; }
+    const me = this.me(), owner = f.owner || me.id;
+    const t = { id: 't' + Date.now().toString(36), title: f.title.trim(), client: r.clientId, date: f.date, time: f.time, done: false, note: '', owner, createdBy: me.id };
+    this.setState(s => ({ tasks: [...s.tasks, t], fForm: EMPTY_F(), triedF: false }));
+    this.nav('/clientes/' + r.clientId);
+    this.flash('Seguimiento para ' + (owner === me.id ? 'ti' : userOf(owner).name) + ' · ' + dayLabel(f.date) + (f.time ? ', ' + f.time : ''));
+  }
+  saveSale(ev) {
+    ev && ev.preventDefault && ev.preventDefault();
+    const r = this.route(), f = { ...EMPTY_S(), ...this.state.sForm }, e = this.validateS(f);
+    if (Object.keys(e).length) { this.setState({ triedS: true }); this.focusFirst(e, { concept: 'v-concept', amount: 'v-amount', date: 'v-date' }); return; }
+    const amount = parseAmount(f.amount);
+    this.addHistory(r.clientId, { id: 'h' + (seq++), kind: 'venta', concept: f.concept.trim(), amount, status: f.status, who: f.manager || this.me().id, createdBy: this.me().id, ts: f.date + 'T' + (f.date === TODAY_S ? nowHM() : '12:00') });
+    this.setState({ sForm: EMPTY_S(), triedS: false });
+    this.nav('/clientes/' + r.clientId);
+    this.flash('Oportunidad ' + OPP[f.status].label.toLowerCase() + ' · ' + eur(amount));
+  }
+
+  renderVals() {
+    const { path, w, clients, tasks, q, stage, tried, toast, triedI, triedF, triedS } = this.state;
+    const iForm = { ...EMPTY_I(), ...this.state.iForm }, fForm = { ...EMPTY_F(), ...this.state.fForm }, sForm = { ...EMPTY_S(), ...this.state.sForm };
+    if (!this.state.login) Object.assign(this.state, { login: EMPTY_LOGIN(), session: this.state.session === undefined ? readSession() : this.state.session });
+    if (!this.state.users) Object.assign(this.state, { users: USERS, cForm: { current: '', next: '', repeat: '', show: false } });
+    CURRENT_USERS = this.state.users;
+    const me = this.me(), authed = this.authed();
+    const devNotes = this.props.devNotes ?? true;
+    const team = Object.values(this.state.users).sort((a, b) => (a.roleId === 'duena' ? -1 : b.roleId === 'duena' ? 1 : a.full.localeCompare(b.full)));
+    const pForm = this.state.pForm || { full: me.full, email: me.email };
+    const pErr = this.state.pTried ? this.validateP(pForm) : {};
+    const cErr = this.state.cTried ? this.validateC(this.state.cForm) : {};
+    const setC = k => e => this.setState({ cForm: { ...this.state.cForm, [k]: e.target.value } });
+    const askLogout = () => this.setState({ confirm: { type: 'logout', title: '¿Cerrar sesión?', body: 'Tendrás que volver a entrar con tu email y contraseña.', icon: 'sign-out', action: 'Cerrar sesión', note: '' } });
+    const lErr = this.state.loginTried ? this.validateL(this.state.login) : {};
+    const form = { ...EMPTY_FORM, ...this.state.form };
+    const r = this.parse(path, clients);
+    const isDesktop = w >= 1024, isWide = w >= 768;
+    const byId = id => clients.find(c => c.id === id) || { history: [] };
+    const go = p => () => this.nav(p);
+    const lastContactOf = c => { const h = [...c.history].filter(x => x.kind === 'interaccion' && x.channel !== 'nota').sort((a, b) => b.ts.localeCompare(a.ts))[0]; if (!h) return null; const k = daysAgo(h.ts); return k === 0 ? 'hoy, ' + h.ts.slice(11, 16) : k === 1 ? 'ayer' : dayLabel(h.ts); };
+
+    const taskVM = t => {
+      const c = byId(t.client);
+      const overdue = !t.done && t.date < TODAY_S;
+      const whenFull = (overdue ? 'Atrasada · ' : '') + dayLabel(t.date) + (t.time ? ' · ' + t.time : '');
+      return {
+        ...t, overdue, whenFull, clientName: c.name,
+        ownerName: t.owner === me.id ? userOf(t.owner).name + ' (tú)' : userOf(t.owner).name, ownerInitials: userOf(t.owner).initials,
+        createdByName: t.createdBy === me.id ? 'ti' : userOf(t.createdBy).name, company: c.company, initials: initials(c.company || c.name),
+        metaColor: t.done ? 'var(--color-text-subtle)' : overdue ? 'var(--color-danger-fg)' : 'var(--color-text-muted)',
+        metaIcon: t.done ? 'check' : overdue ? 'warning-circle' : 'clock',
+        deco: t.done ? 'line-through' : 'none', titleColor: t.done ? 'var(--color-text-subtle)' : 'var(--color-text)',
+        actionColor: t.done ? 'var(--color-text-subtle)' : 'var(--color-text-muted)', dim: t.done ? 0.6 : 1,
+        btnClass: t.done ? 'btn-ghost' : 'btn-secondary', btnColor: t.done ? 'var(--color-success-fg)' : 'var(--color-text)',
+        btnIcon: t.done ? 'ph-check-circle' : 'ph-check', btnLabel: t.done ? 'Hecha' : 'Hecho',
+        toggleLabel: (t.done ? 'Reabrir: ' : 'Marcar como hecho: ') + t.title + ' (' + c.name + ')',
+        openLabel: 'Abrir ficha de ' + c.name + ': ' + t.title,
+        ring: r.taskId === t.id ? '0 0 0 1px var(--color-accent)' : 'var(--shadow-sm)',
+        onToggle: () => this.toggleTask(t.id), openClient: go('/clientes/' + t.client), tel: 'tel:' + (c.phone || '').replace(/\s/g, ''),
+        actionLabel: t.done ? 'Reabrir' : 'Marcar como hecho', actionIcon: t.done ? 'ph-arrow-counter-clockwise' : 'ph-check',
+      };
+    };
+    const sortT = (a, b) => (a.date + (a.time || '99')).localeCompare(b.date + (b.time || '99'));
+    const vms = [...tasks].sort(sortT).map(taskVM);
+    const late = vms.filter(t => t.overdue), todayP = vms.filter(t => !t.done && t.date === TODAY_S);
+    const pendingN = late.length + todayP.length;
+    const groups = [
+      { label: 'Atrasadas', icon: 'warning-circle', color: 'var(--color-danger-fg)', items: late },
+      { label: 'Para hoy', icon: 'sun-horizon', color: 'var(--color-text-muted)', items: todayP },
+      { label: 'Completadas', icon: 'check-circle', color: 'var(--color-text-subtle)', items: vms.filter(t => t.done && t.date <= TODAY_S) },
+    ].filter(g => g.items.length).map(g => ({ ...g, count: g.items.length }));
+    const task = r.taskId ? vms.find(t => t.id === r.taskId) : {};
+
+    const counts = clients.reduce((m, c) => (m[c.stage] = (m[c.stage] || 0) + 1, m), {});
+    const stageChips = [{ id: 'todos', label: 'Todos', count: clients.length }, ...['nuevo', 'contactado', 'propuesta', 'negociacion', 'ganado'].map(s => ({ id: s, label: STAGES[s].label, count: counts[s] || 0 }))]
+      .map(s => ({ ...s, selected: stage === s.id, onClick: () => this.setState({ stage: s.id }) }));
+    const nq = norm(q.trim()), dq = q.replace(/\D/g, '');
+    const match = c => !nq || norm(c.name).includes(nq) || norm(c.email).includes(nq) || (dq.length >= 2 && (c.phone || '').replace(/\D/g, '').includes(dq));
+    const clientRows = clients.filter(c => (stage === 'todos' || c.stage === stage) && match(c)).map(c => {
+      const sel = isWide && r.clientId === c.id;
+      const ct = vms.filter(t => t.client === c.id && !t.done);
+      const isLate = ct.some(t => t.overdue), isToday = ct.some(t => t.date === TODAY_S);
+      const st = STAGES[c.stage], lc = lastContactOf(c);
+      const lastLabel = lc ? 'Último contacto: ' + lc : 'Sin contactar todavía';
+      const taskLabel = isLate ? 'Tarea atrasada' : isToday ? 'Tarea para hoy' : '';
+      return { ...c, initials: initials(c.company || c.name), tone: st.tone, stageLabel: st.label, stageIcon: st.icon,
+        ref: [c.company, c.phone, !c.company && c.email].filter(Boolean).join(' · ') || 'Sin datos de contacto',
+        lastLabel, hasTaskTag: isLate || isToday, taskLabel, taskTone: isLate ? 'danger' : 'warning', taskIcon: isLate ? 'warning-circle' : 'clock',
+        label: [c.name, c.company, st.label, taskLabel, lastLabel].filter(Boolean).join(', '),
+        current: sel ? 'page' : undefined, bg: sel ? 'var(--color-surface-2)' : 'var(--color-surface)', ring: sel ? 'inset 2px 0 0 var(--color-accent)' : 'none', onOpen: go('/clientes/' + c.id) };
+    });
+
+    let client = {};
+    if (r.screen === 'ficha') {
+      const c = byId(r.clientId), st = STAGES[c.stage], o = ORIGINS[c.origin];
+      const pending = vms.filter(t => t.client === c.id && !t.done);
+      const hist = [...c.history].sort((a, b) => b.ts.localeCompare(a.ts)).map(h => {
+        const u = userOf(h.who), uname = u.id === me.id ? u.name + ' (tú)' : u.name;
+        const who = uname + ' · ' + h.ts.slice(11, 16);
+        if (h.kind === 'venta') { const o = OPP[h.status || 'ganada']; return { id: h.id, isSale: true, icon: 'currency-eur', iconBg: 'var(--color-' + o.tone + '-bg)', iconColor: 'var(--color-' + o.tone + '-fg)', title: h.concept, sub: 'Oportunidad · gestiona ' + who, amount: eur(h.amount), statusTone: o.tone, statusIcon: o.icon, statusLabel: o.label, day: h.ts.slice(0, 10) }; }
+        const ch = CHANNELS[h.channel];
+        return { id: h.id, isSale: false, icon: ch.icon, iconBg: 'var(--color-surface-2)', iconColor: 'var(--color-text-muted)', title: h.text, sub: ch.label + ' · ' + who, day: h.ts.slice(0, 10) };
+      });
+      const historyDays = [];
+      hist.forEach(h => { let g = historyDays[historyDays.length - 1]; if (!g || g.key !== h.day) { g = { key: h.day, label: dayLabel(h.day), items: [] }; historyDays.push(g); } g.items.push(h); });
+      const sumBy = st => c.history.filter(h => h.kind === 'venta' && (h.status || 'ganada') === st).reduce((s, h) => s + h.amount, 0);
+      const sales = sumBy('ganada'), open = sumBy('abierta');
+      client = { ...c, initials: initials(c.company || c.name), tone: st.tone, stageIcon: st.icon, stageLabel: st.label,
+        companyLabel: c.company || 'Sin empresa', companyColor: c.company ? 'var(--color-text-muted)' : 'var(--color-text-subtle)',
+        hasPhone: !!c.phone, phoneLabel: c.phone || 'Sin teléfono', phoneColor: c.phone ? 'var(--color-text)' : 'var(--color-text-subtle)',
+        tel: c.phone ? 'tel:' + c.phone.replace(/\s/g, '') : undefined, telLabel: c.phone ? 'Llamar al ' + c.phone : 'Sin teléfono',
+        wa: c.phone ? 'https://wa.me/' + c.phone.replace(/\D/g, '') : undefined,
+        emailLabel: c.email || 'Sin email', emailColor: c.email ? 'var(--color-text)' : 'var(--color-text-subtle)', mailto: c.email ? 'mailto:' + c.email : undefined,
+        originIcon: o ? o.icon : 'question', originLabel: o ? o.label : 'Desconocido',
+        pending: pending.map(p => ({ ...p, toggleLabel: 'Marcar como hecho: ' + p.title })), pendingCount: pending.length || '', noPending: !pending.length,
+        historyDays, noHistory: !hist.length, hasSales: sales > 0, salesTotal: eur(sales), hasOpen: open > 0, openTotal: eur(open) };
+    }
+    const base = r.clientId ? '/clientes/' + r.clientId : '/clientes';
+    const cl = r.tab === 'clientes';
+
+    const errs = tried ? this.validate(form) : {};
+    const nErr = Object.keys(errs).length;
+    const flag = e => Object.fromEntries(Object.keys(e).map(k => [k + 'Invalid', true]));
+    const set = k => e => this.setState({ form: { ...EMPTY_FORM, ...this.state.form, [k]: e.target.value } });
+    const setI = k => e => this.setState({ iForm: { ...EMPTY_I(), ...this.state.iForm, [k]: e.target.value } });
+    const setF = k => e => this.setState({ fForm: { ...EMPTY_F(), ...this.state.fForm, [k]: e.target.value } });
+    const setS = k => e => this.setState({ sForm: { ...EMPTY_S(), ...this.state.sForm, [k]: e.target.value } });
+    const iErr = triedI ? this.validateI(iForm) : {}, fErr = triedF ? this.validateF(fForm) : {}, sErr = triedS ? this.validateS(sForm) : {};
+    const nextMon = (() => { const d = new Date(TODAY); d.setDate(d.getDate() + ((8 - d.getDay()) % 7 || 7)); return iso(d); })();
+
+    return {
+      themeAttr: this.props.theme === 'claro' ? 'light' : 'dark', colorScheme: this.props.theme === 'claro' ? 'light' : 'dark',
+      shellDir: isDesktop ? 'row' : 'column', isDesktop, isWide,
+      hoyCurrent: r.tab === 'hoy' ? 'page' : undefined, clientesCurrent: cl ? 'page' : undefined,
+      goHoy: go('/hoy'), goClientes: go('/clientes'), goNuevo: go('/clientes/nuevo'),
+      goInteraccion: go(base + '/interaccion'), goSeguimiento: go(base + '/seguimiento'), goVenta: go(base + '/venta'), closeSheet: go(base),
+      pendingCount: pendingN, hasPending: pendingN > 0,
+      pendingLabel: pendingN ? pendingN + (pendingN === 1 ? ' pendiente' : ' pendientes') : '',
+      todayLabel: LARGA.format(TODAY).replace(/^./, m => m.toUpperCase()), allDone: !pendingN, groups, task,
+      showHoy: r.tab === 'hoy', showTaskPanel: isDesktop && !!r.taskId, showTaskSheet: !isDesktop && !!r.taskId,
+      showList: cl && (isWide || r.screen === 'list'), listWidth: isWide ? (isDesktop ? '380px' : '320px') : '100%',
+      listBorder: isWide ? '1px solid var(--color-border)' : '0', showFab: !isWide && r.screen === 'list',
+      q, onQ: e => this.setState({ q: e.target.value }), stageChips, clientRows, noResults: !clientRows.length,
+      showPane: cl && (isWide || r.screen !== 'list'), showEmpty: isWide && r.screen === 'list',
+      showFicha: r.screen === 'ficha', showNuevo: r.screen === 'nuevo', showBack: !isWide, client,
+
+      showSheet: !!r.form, sheetTitle: FORM_TITLES[r.form] || '',
+      formInteraccion: r.form === 'interaccion', formSeguimiento: r.form === 'seguimiento', formVenta: r.form === 'venta',
+      sheet: isWide
+        ? { left: '50%', right: 'auto', top: '50%', bottom: 'auto', width: 'min(480px, calc(100vw - 32px))', transform: 'translate(-50%, -50%)', radius: 'var(--radius-lg)', handle: false }
+        : { left: '0', right: '0', top: 'auto', bottom: '0', width: 'auto', transform: 'none', radius: 'var(--radius-lg) var(--radius-lg) 0 0', handle: true },
+      me: { ...me, accountLabel: 'Mi cuenta: ' + me.full, roleLabel: (ROLES[me.roleId] || {}).label, roleTone: (ROLES[me.roleId] || {}).tone, roleIcon: (ROLES[me.roleId] || {}).icon,
+        roleCheck: "role = '" + me.roleId + "' → " + (canManageUsers(me) ? 'visible' : 'oculta') },
+      devNotes: this.props.devNotes ?? true, canManage: canManageUsers(me),
+      cuentaCurrent: r.tab === 'cuenta' ? 'page' : undefined,
+      goCuenta: go('/cuenta'), goCuentaDatos: () => { this.setState({ pForm: null, pTried: false }); this.nav('/cuenta/datos'); },
+      goCuentaPass: () => { this.setState({ cForm: { current: '', next: '', repeat: '', show: false }, cTried: false }); this.nav('/cuenta/contrasena'); }, goEquipo: go('/equipo'),
+      showCuenta: r.screen === 'cuenta', showCuentaDatos: r.screen === 'cuentaDatos', showCuentaPass: r.screen === 'cuentaPass', showEquipo: r.screen === 'equipo', showForbidden: r.screen === 'forbidden',
+      pForm: pForm, pErr: { ...pErr, ...flag(pErr), emailOk: !pErr.email },
+      onPName: e => this.setState({ pForm: { ...pForm, full: e.target.value } }), onPEmail: e => this.setState({ pForm: { ...pForm, email: e.target.value } }),
+      saveProfile: ev => this.saveProfile(ev),
+      cForm: this.state.cForm, cErr: { ...cErr, ...flag(cErr), nextOk: !cErr.next }, cPwType: this.state.cForm.show ? 'text' : 'password',
+      onCCurrent: setC('current'), onCNext: setC('next'), onCRepeat: setC('repeat'),
+      toggleCShow: e => this.setState({ cForm: { ...this.state.cForm, show: e.target.checked } }),
+      savePassword: ev => this.savePassword(ev),
+      userCount: team.length, userCountLabel: team.length + (team.length === 1 ? ' usuario' : ' usuarios'),
+      teamRows: team.map(u => {
+        const self = u.id === me.id, owner = u.roleId === 'duena', ro = ROLES[u.roleId];
+        const pend = tasks.filter(t => t.owner === u.id && !t.done).length;
+        return { ...u, displayName: u.full + (self ? ' (tú)' : ''), roleLabel: ro.label, roleTone: ro.tone, roleIcon: ro.icon,
+          canDelete: !self && !owner, lockReason: self ? 'No puedes eliminar tu propio usuario' : owner ? 'La dueña no se puede eliminar' : '',
+          deleteLabel: 'Eliminar a ' + u.full,
+          onDelete: () => this.setState({ confirm: { type: 'delete', id: u.id, title: '¿Eliminar a ' + u.full + '?', icon: 'trash', action: 'Eliminar usuario',
+            body: 'Perderá el acceso al CRM. ' + (pend ? 'Sus ' + pend + (pend === 1 ? ' seguimiento pendiente pasará' : ' seguimientos pendientes pasarán') + ' a ti. ' : '') + 'Su historial con clientes se conserva.',
+            note: devNotes ? "canManageUsers(sesión) se comprueba otra vez al confirmar" : '' } }) };
+      }),
+      askLogout: askLogout,
+      hasConfirm: !!this.state.confirm, confirm: this.state.confirm || {},
+      cancelConfirm: () => this.setState({ confirm: null }), stop: e => e.stopPropagation(),
+      doConfirm: () => { const c = this.state.confirm; if (!c) return; if (c.type === 'logout') this.logout(); else if (c.type === 'delete') this.deleteUser(c.id); },
+      showLogin: r.screen === 'login', showSidebar: isDesktop && authed,
+      login: this.state.login, lErr: { ...lErr, ...flag(lErr) }, loginError: this.state.loginError,
+      onLEmail: e => this.setState({ login: { ...this.state.login, email: e.target.value }, loginError: '' }),
+      onLPass: e => this.setState({ login: { ...this.state.login, password: e.target.value }, loginError: '' }),
+      togglePw: () => this.setState({ login: { ...this.state.login, show: !this.state.login.show } }),
+      toggleRemember: e => this.setState({ login: { ...this.state.login, remember: e.target.checked } }),
+      pwType: this.state.login.show ? 'text' : 'password', pwIcon: this.state.login.show ? 'ph-eye-slash' : 'ph-eye',
+      pwToggleLabel: this.state.login.show ? 'Ocultar contraseña' : 'Mostrar contraseña',
+      loggingIn: this.state.loggingIn || undefined, loginIcon: this.state.loggingIn ? 'ph-circle-notch spin' : 'ph-sign-in', loginLabel: this.state.loggingIn ? 'Entrando…' : 'Entrar',
+      doLogin: ev => this.doLogin(ev), logout: () => this.logout(),
+      demoUsers: Object.values(USERS).map(u => ({ ...u, onUse: () => this.setState({ login: { ...this.state.login, email: u.email, password: DEMO_PASSWORD }, loginError: '', loginTried: false }) })),
+      openAccount: go('/cuenta'),
+      teamOpts: Object.values(USERS).map(u => ({ id: u.id, optLabel: u.full + (u.id === me.id ? ' (tú)' : '') + ' · ' + u.role })),
+      fOwner: fForm.owner || me.id, onFOwner: setF('owner'),
+      sManager: sForm.manager || me.id, onSManager: setS('manager'),
+      statusOpts: Object.keys(OPP).map(k => { const o = OPP[k], on = sForm.status === k; return { value: k, ...o, checked: on,
+        bg: on ? 'var(--color-' + o.tone + '-bg)' : 'transparent', color: on ? 'var(--color-' + o.tone + '-fg)' : 'var(--color-text)', border: on ? 'var(--color-' + o.tone + '-fg)' : 'var(--color-border-strong)',
+        onPick: () => this.setState({ sForm: { ...EMPTY_S(), ...this.state.sForm, status: k } }) }; }),
+      iForm, iErr: { ...iErr, ...flag(iErr) }, onIText: setI('text'), onIDate: setI('date'),
+      channelOpts: ['llamada', 'email', 'whatsapp', 'persona'].map(k => ({ value: k, ...CHANNELS[k], checked: iForm.channel === k, onPick: () => this.setState({ iForm: { ...this.state.iForm, channel: k } }) })),
+      saveInteraction: ev => this.saveInteraction(ev),
+      fForm, fErr: { ...fErr, ...flag(fErr) }, onFTitle: setF('title'), onFDate: setF('date'), onFTime: setF('time'), todayIso: TODAY_S,
+      dateShortcuts: [['Hoy', day(0)], ['Mañana', day(1)], ['El lunes', nextMon], ['En una semana', day(7)]].map(([label, d]) => ({ label, selected: fForm.date === d, onPick: () => this.setState({ fForm: { ...this.state.fForm, date: d } }) })),
+      saveFollowup: ev => this.saveFollowup(ev),
+      sForm, sErr: { ...sErr, ...flag(sErr) }, onSConcept: setS('concept'), onSAmount: setS('amount'), onSDate: setS('date'),
+      saveSale: ev => this.saveSale(ev),
+
+      form, err: { ...errs, ...flag(errs), phoneOk: !errs.phone }, hasErrors: tried && nErr > 0,
+      errorSummary: nErr === 1 ? 'Revisa 1 campo antes de guardar.' : 'Revisa ' + nErr + ' campos antes de guardar.',
+      onName: set('name'), onCompany: set('company'), onPhone: set('phone'), onEmail: set('email'), onNote: set('note'),
+      originOpts: Object.keys(ORIGINS).map(k => ({ value: k, ...ORIGINS[k], checked: form.origin === k, onPick: () => this.setState({ form: { ...form, origin: k } }) })),
+      noteCount: form.note.length + ' / 500',
+      saving: this.state.saving || undefined, saveIcon: this.state.saving ? 'ph-circle-notch spin' : 'ph-floppy-disk', saveLabel: this.state.saving ? 'Guardando…' : 'Guardar cliente',
+      saveClient: ev => this.saveClient(ev),
+
+      show404: r.screen === '404', showBottomNav: !isDesktop && authed,
+      hasToast: !!toast, toastMsg: toast && toast.msg, hasUndo: !!(toast && toast.undo),
+      undoToast: () => { toast && toast.undo && toast.undo(); clearTimeout(this.tt); this.setState({ toast: null }); },
+      toastBottom: isDesktop || !authed ? '24px' : '88px', routeBottom: isDesktop || !authed ? '8px' : '76px',
+      routeLabel: path,
+    };
+  }
+}
+</script>
+</body>
+</html>

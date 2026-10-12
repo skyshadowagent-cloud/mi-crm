@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/nocturne-79086d1c-0bf4-45a5-a9af-af8ec99f2ec8/styles.css">
+<script src="_ds/nocturne-79086d1c-0bf4-45a5-a9af-af8ec99f2ec8/_ds_bundle.js"></script>
+<link rel="stylesheet" href="styles.css">
+<style>
+body { margin: 0; background: var(--color-bg); }
+a { color: var(--color-accent-text); }
+a:hover { color: var(--color-text); }
+</style>
+</helmet>
+<div data-theme="{{ themeAttr }}" style="min-height: 100vh; background: var(--color-bg); color: var(--color-text); font-family: var(--font-sans); font-size: 1rem; line-height: 1.5;">
+<div style="max-width: 1120px; margin: 0 auto; padding: 0 20px 96px;">
+
+<header style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 24px 0;">
+  <div style="display: flex; align-items: baseline; gap: 12px; margin-right: auto;">
+    <span style="display: flex; align-items: center; gap: 8px; font-size: 1.4375rem; font-weight: 600; letter-spacing: -0.03em;"><span style="width: 10px; height: 10px; border-radius: 3px; background: var(--color-accent);"></span>CRM</span>
+    <span style="font-size: 0.875rem; color: var(--color-text-subtle);">Design System · v1.0</span>
+  </div>
+  <div class="seg" role="radiogroup" aria-label="Tema">
+    <label class="seg-opt"><input type="radio" name="theme" checked="{{ isDark }}" onChange="{{ setDark }}"><i class="ph ph-moon"></i>Oscuro</label>
+    <label class="seg-opt"><input type="radio" name="theme" checked="{{ isLight }}" onChange="{{ setLight }}"><i class="ph ph-sun"></i>Claro</label>
+  </div>
+</header>
+
+<section style="display: grid; gap: 24px; padding: 32px 0 48px;">
+  <h1 style="margin: 0; max-width: 18ch; font-size: clamp(2.0625rem, 6vw, 3.5rem); font-weight: 600; line-height: 1.08; letter-spacing: -0.035em; text-wrap: balance;">Un CRM que se entiende a la primera</h1>
+  <p style="margin: 0; max-width: 56ch; font-size: 1.1875rem; line-height: 1.5; color: var(--color-text-muted); text-wrap: pretty;">Sistema de diseño móvil primero para un pequeño negocio de ventas digitales. Parte de Nocturne: oscuro por defecto, con modo claro, Inter, acento morado y contraste WCAG 2.2 AA.</p>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 12px; margin-top: 8px;">
+    <div class="card"><i class="ph ph-arrow-right" style="font-size: 1.5rem; color: var(--color-accent-text);"></i><div style="font-weight: 600;">Directo</div><div style="font-size: 0.875rem; color: var(--color-text-muted);">Una acción principal por pantalla. Verbos claros: Llamar, Guardar, Mover.</div></div>
+    <div class="card"><i class="ph ph-text-aa" style="font-size: 1.5rem; color: var(--color-accent-text);"></i><div style="font-weight: 600;">Legible</div><div style="font-size: 0.875rem; color: var(--color-text-muted);">Texto de 16px, iconos siempre con etiqueta y estados que no dependen solo del color.</div></div>
+    <div class="card"><i class="ph ph-lightning" style="font-size: 1.5rem; color: var(--color-accent-text);"></i><div style="font-weight: 600;">Rápido</div><div style="font-size: 0.875rem; color: var(--color-text-muted);">Zonas táctiles de 48px, gestos para llamar y animaciones de menos de 200ms.</div></div>
+  </div>
+</section>
+
+<section id="color" style="display: grid; gap: 24px; padding: 48px 0;">
+  <div style="display: grid; gap: 4px;"><span style="font-size: 0.875rem; font-weight: 500; color: var(--color-accent-text);">01</span><h2 style="margin: 0; font-size: 1.75rem; font-weight: 600; letter-spacing: -0.02em;">Color</h2><p style="margin: 0; max-width: 60ch; color: var(--color-text-muted);">Neutros para superficies y texto. El morado marca líneas, foco y selección, nunca rellena áreas grandes. Contraste indicado como oscuro / claro.</p></div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr)); gap: 16px;">
+    <div style="display: grid; gap: 8px;"><div style="height: 64px; border-radius: var(--radius-md); background: var(--color-bg); box-shadow: inset 0 0 0 1px var(--color-border-strong);"></div><div style="font-weight: 500;">Fondo</div><div style="font-size: 0.75rem; color: var(--color-text-subtle);">--color-bg · #161826 / #f6f6f9</div></div>
+    <div style="display: grid; gap: 8px;"><div style="height: 64px; border-radius: var(--radius-md); background: var(--color-surface); box-shadow: inset 0 0 0 1px var(--color-border);"></div><div style="font-weight: 500;">Superficie</div><div style="font-size: 0.75rem; color: var(--color-text-subtle);">--color-surface · #1e2030 / #fdfdfe</div></div>
+    <div style="display: grid; gap: 8px;"><div style="height: 64px; border-radius: var(--radius-md); background: var(--color-surface-2); box-shadow: inset 0 0 0 1px var(--color-border);"></div><div style="font-weight: 500;">Superficie elevada</div><div style="font-size: 0.75rem; color: var(--color-text-subtle);">--color-surface-2 · #272a3a / #efeff4</div></div>
+    <div style="display: grid; gap: 8px;"><div style="height: 64px; border-radius: var(--radius-md); background: var(--color-border);"></div><div style="font-weight: 500;">Borde</div><div style="font-size: 0.75rem; color: var(--color-text-subtle);">--color-border · separadores y tarjetas</div></div>
+    <div style="display: grid; gap: 8px;"><div style="height: 64px; border-radius: var(--radius-md); background: var(--color-border-strong);"></div><div style="font-weight: 500;">Borde de campo</div><div style="font-size: 0.75rem; color: var(--color-text-subtle);">--color-border-strong · 3.5 / 3.2:1</div></div>
+    <div style="display: grid; gap: 8px;"><div style="height: 64px; border-radius: var(--radius-md); background: var(--color-text);"></div><div style="font-weight: 500;">Texto</div><div style="font-size: 0.75rem; color: var(--color-text-subtle);">--color-text · 14.5 / 15.7:1</div></div>
+    <div style="display: grid; gap: 8px;"><div style="height: 64px; border-radius: var(--radius-md); background: var(--color-text-muted);"></div><div style="font-weight: 500;">Texto secundario</div><div style="font-size: 0.75rem; color: var(--color-text-subtle);">--color-text-muted · 7.5 / 6.8:1</div></div>
+    <div style="display: grid; gap: 8px;"><div style="height: 64px; border-radius: var(--radius-md); background: var(--color-text-subtle);"></div><div style="font-weight: 500;">Texto terciario</div><div style="font-size: 0.75rem; color: var(--color-text-subtle);">--color-text-subtle · 5.4 / 5.1:1</div></div>
+    <div style="display: grid; gap: 8px;"><div style="height: 64px; border-radius: var(--radius-md); background: var(--color-accent);"></div><div style="font-weight: 500;">Acento</div><div style="font-size: 0.75rem; color: var(--color-text-subtle);">--color-accent · #6d5bd0 · 3.4 / 4.8:1 · líneas, foco e iconos</div></div>
+    <div style="display: grid; gap: 8px;"><div style="height: 64px; border-radius: var(--radius-md); background: var(--color-accent-text);"></div><div style="font-weight: 500;">Texto de acento</div><div style="font-size: 0.75rem; color: var(--color-text-subtle);">--color-accent-text · 7.3 / 6.9:1</div></div>
+  </div>
+  <div style="display: grid; gap: 8px;">
+    <div style="font-size: 0.875rem; font-weight: 500; color: var(--color-text-muted);">Rampa de acento</div>
+    <div style="display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: 4px;">
+      <div style="display: grid; gap: 4px;"><div style="height: 48px; border-radius: var(--radius-sm); background: var(--color-accent-100);"></div><span style="font-size: 0.75rem; color: var(--color-text-subtle);">100</span></div>
+      <div style="display: grid; gap: 4px;"><div style="height: 48px; border-radius: var(--radius-sm); background: var(--color-accent-200);"></div><span style="font-size: 0.75rem; color: var(--color-text-subtle);">200</span></div>
+      <div style="display: grid; gap: 4px;"><div style="height: 48px; border-radius: var(--radius-sm); background: var(--color-accent-300);"></div><span style="font-size: 0.75rem; color: var(--color-text-subtle);">300</span></div>
+      <div style="display: grid; gap: 4px;"><div style="height: 48px; border-radius: var(--radius-sm); background: var(--color-accent-400);"></div><span style="font-size: 0.75rem; color: var(--color-text-subtle);">400</span></div>
+      <div style="display: grid; gap: 4px;"><div style="height: 48px; border-radius: var(--radius-sm); background: var(--color-accent-500);"></div><span style="font-size: 0.75rem; color: var(--color-text-subtle);">500</span></div>
+      <div style="display: grid; gap: 4px;"><div style="height: 48px; border-radius: var(--radius-sm); background: var(--color-accent-600); box-shadow: 0 0 0 2px var(--color-bg), 0 0 0 3px var(--color-accent);"></div><span style="font-size: 0.75rem; color: var(--color-text);">600 · base</span></div>
+      <div style="display: grid; gap: 4px;"><div style="height: 48px; border-radius: var(--radius-sm); background: var(--color-accent-700);"></div><span style="font-size: 0.75rem; color: var(--color-text-subtle);">700</span></div>
+      <div style="display: grid; gap: 4px;"><div style="height: 48px; border-radius: var(--radius-sm); background: var(--color-accent-800);"></div><span style="font-size: 0.75rem; color: var(--color-text-subtle);">800</span></div>
+      <div style="display: grid; gap: 4px;"><div style="height: 48px; border-radius: var(--radius-sm); background: var(--color-accent-900);"></div><span style="font-size: 0.75rem; color: var(--color-text-subtle);">900</span></div>
+    </div>
+  </div>
+  <div style="display: grid; gap: 8px;">
+    <div style="font-size: 0.875rem; font-weight: 500; color: var(--color-text-muted);">Semánticos · siempre con icono o texto</div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr)); gap: 12px;">
+      <div class="card"><span class="tag tag-success" style="align-self: flex-start;"><i class="ph ph-check-circle"></i>Éxito</span><div style="font-size: 0.75rem; color: var(--color-text-subtle);">--color-success-fg / -bg · 9.6 / 5.8:1</div></div>
+      <div class="card"><span class="tag tag-warning" style="align-self: flex-start;"><i class="ph ph-clock"></i>Aviso</span><div style="font-size: 0.75rem; color: var(--color-text-subtle);">--color-warning-fg / -bg · 9.3 / 5.1:1</div></div>
+      <div class="card"><span class="tag tag-danger" style="align-self: flex-start;"><i class="ph ph-x-circle"></i>Error</span><div style="font-size: 0.75rem; color: var(--color-text-subtle);">--color-danger-fg / -bg · 7.9 / 6.4:1</div></div>
+      <div class="card"><span class="tag tag-info" style="align-self: flex-start;"><i class="ph ph-info"></i>Información</span><div style="font-size: 0.75rem; color: var(--color-text-subtle);">--color-info-fg / -bg · 8.6 / 6.0:1</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="tipografia" style="display: grid; gap: 24px; padding: 48px 0;">
+  <div style="display: grid; gap: 4px;"><span style="font-size: 0.875rem; font-weight: 500; color: var(--color-accent-text);">02</span><h2 style="margin: 0; font-size: 1.75rem; font-weight: 600; letter-spacing: -0.02em;">Tipografía</h2><p style="margin: 0; max-width: 60ch; color: var(--color-text-muted);">Inter con eje óptico: a partir de 20px usa su corte Display. Escala 1.2 en rem, base 16px e interlineado 1.5. Pesos 400 texto, 500 etiquetas, 600 títulos.</p></div>
+  <div style="display: grid; gap: 0;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap: 4px 24px; align-items: baseline; padding: 16px 0; border-bottom: 1px solid var(--color-border);"><span style="font-size: 0.75rem; color: var(--color-text-subtle);">Display · 33/38 · 600<br>text-3xl</span><span style="grid-column: span 3; font-size: 2.0625rem; line-height: 1.15; font-weight: 600; letter-spacing: -0.03em;">Pipeline de octubre</span></div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap: 4px 24px; align-items: baseline; padding: 16px 0; border-bottom: 1px solid var(--color-border);"><span style="font-size: 0.75rem; color: var(--color-text-subtle);">Título 1 · 28/34 · 600<br>text-2xl</span><span style="grid-column: span 3; font-size: 1.75rem; line-height: 1.2; font-weight: 600; letter-spacing: -0.02em;">Deals abiertos</span></div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap: 4px 24px; align-items: baseline; padding: 16px 0; border-bottom: 1px solid var(--color-border);"><span style="font-size: 0.75rem; color: var(--color-text-subtle);">Título 2 · 23/30 · 600<br>text-xl</span><span style="grid-column: span 3; font-size: 1.4375rem; line-height: 1.3; font-weight: 600; letter-spacing: -0.015em;">Estudio Brisa</span></div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap: 4px 24px; align-items: baseline; padding: 16px 0; border-bottom: 1px solid var(--color-border);"><span style="font-size: 0.75rem; color: var(--color-text-subtle);">Título 3 · 19/27 · 600<br>text-lg</span><span style="grid-column: span 3; font-size: 1.1875rem; line-height: 1.4; font-weight: 600;">Próximas tareas</span></div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap: 4px 24px; align-items: baseline; padding: 16px 0; border-bottom: 1px solid var(--color-border);"><span style="font-size: 0.75rem; color: var(--color-text-subtle);">Cuerpo · 16/24 · 400<br>text-base</span><span style="grid-column: span 3; font-size: 1rem;">Llamar a Lucía para cerrar la propuesta de la tienda online.</span></div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap: 4px 24px; align-items: baseline; padding: 16px 0; border-bottom: 1px solid var(--color-border);"><span style="font-size: 0.75rem; color: var(--color-text-subtle);">Etiqueta · 16/24 · 500<br>text-base font-medium</span><span style="grid-column: span 3; font-size: 1rem; font-weight: 500;">Guardar cambios</span></div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap: 4px 24px; align-items: baseline; padding: 16px 0; border-bottom: 1px solid var(--color-border);"><span style="font-size: 0.75rem; color: var(--color-text-subtle);">Secundario · 14/21 · 400<br>text-sm</span><span style="grid-column: span 3; font-size: 0.875rem; color: var(--color-text-muted);">Última actividad hace 2 horas</span></div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap: 4px 24px; align-items: baseline; padding: 16px 0;"><span style="font-size: 0.75rem; color: var(--color-text-subtle);">Pie · 12/18 · 500<br>text-xs · solo metadatos</span><span style="grid-column: span 3; font-size: 0.75rem; font-weight: 500; color: var(--color-text-subtle);">Actualizado el 29 sept.</span></div>
+  </div>
+  <div class="card" style="max-width: 360px;">
+    <div style="font-size: 0.875rem; font-weight: 500; color: var(--color-text-muted);">Cifras tabulares · .tabular</div>
+    <div class="tabular" style="display: grid; gap: 4px; font-size: 1.1875rem; font-weight: 500; text-align: right;"><span>12.450,00 €</span><span>1.180,50 €</span><span>899,00 €</span></div>
+  </div>
+</section>
+
+<section id="forma" style="display: grid; gap: 24px; padding: 48px 0;">
+  <div style="display: grid; gap: 4px;"><span style="font-size: 0.875rem; font-weight: 500; color: var(--color-accent-text);">03</span><h2 style="margin: 0; font-size: 1.75rem; font-weight: 600; letter-spacing: -0.02em;">Espaciado, forma y elevación</h2><p style="margin: 0; max-width: 60ch; color: var(--color-text-muted);">Base de 4px y densidad cómoda. Bordes finos y sombra mínima: la profundidad viene del tono de la superficie.</p></div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 32px;">
+    <div style="display: grid; gap: 8px; align-content: start;">
+      <div style="font-size: 0.875rem; font-weight: 500; color: var(--color-text-muted);">Espaciado · --spacing 0.25rem</div>
+      <div style="display: flex; align-items: center; gap: 12px;"><span class="tabular" style="width: 64px; font-size: 0.875rem; color: var(--color-text-subtle);">1 · 4</span><span style="width: 4px; height: 16px; background: var(--color-accent); border-radius: 2px;"></span></div>
+      <div style="display: flex; align-items: center; gap: 12px;"><span class="tabular" style="width: 64px; font-size: 0.875rem; color: var(--color-text-subtle);">2 · 8</span><span style="width: 8px; height: 16px; background: var(--color-accent); border-radius: 2px;"></span></div>
+      <div style="display: flex; align-items: center; gap: 12px;"><span class="tabular" style="width: 64px; font-size: 0.875rem; color: var(--color-text-subtle);">3 · 12</span><span style="width: 12px; height: 16px; background: var(--color-accent); border-radius: 2px;"></span></div>
+      <div style="display: flex; align-items: center; gap: 12px;"><span class="tabular" style="width: 64px; font-size: 0.875rem; color: var(--color-text-subtle);">4 · 16</span><span style="width: 16px; height: 16px; background: var(--color-accent); border-radius: 2px;"></span></div>
+      <div style="display: flex; align-items: center; gap: 12px;"><span class="tabular" style="width: 64px; font-size: 0.875rem; color: var(--color-text-subtle);">6 · 24</span><span style="width: 24px; height: 16px; background: var(--color-accent); border-radius: 2px;"></span></div>
+      <div style="display: flex; align-items: center; gap: 12px;"><span class="tabular" style="width: 64px; font-size: 0.875rem; color: var(--color-text-subtle);">8 · 32</span><span style="width: 32px; height: 16px; background: var(--color-accent); border-radius: 2px;"></span></div>
+      <div style="display: flex; align-items: center; gap: 12px;"><span class="tabular" style="width: 64px; font-size: 0.875rem; color: var(--color-text-subtle);">12 · 48</span><span style="width: 48px; height: 16px; background: var(--color-accent); border-radius: 2px;"></span></div>
+    </div>
+    <div style="display: grid; gap: 8px; align-content: start;">
+      <div style="font-size: 0.875rem; font-weight: 500; color: var(--color-text-muted);">Radio de borde</div>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px;">
+        <div style="display: grid; gap: 6px;"><div style="height: 56px; border-radius: var(--radius-sm); border: 1px solid var(--color-border-strong);"></div><span style="font-size: 0.875rem; color: var(--color-text-subtle);">sm · 8 · tags, logos</span></div>
+        <div style="display: grid; gap: 6px;"><div style="height: 56px; border-radius: var(--radius-md); border: 1px solid var(--color-accent);"></div><span style="font-size: 0.875rem; color: var(--color-text-subtle);">md · 12 · base</span></div>
+        <div style="display: grid; gap: 6px;"><div style="height: 56px; border-radius: var(--radius-lg); border: 1px solid var(--color-border-strong);"></div><span style="font-size: 0.875rem; color: var(--color-text-subtle);">lg · 16 · diálogos</span></div>
+        <div style="display: grid; gap: 6px;"><div style="height: 56px; border-radius: var(--radius-full); border: 1px solid var(--color-border-strong);"></div><span style="font-size: 0.875rem; color: var(--color-text-subtle);">full · botón flotante</span></div>
+      </div>
+    </div>
+    <div style="display: grid; gap: 8px; align-content: start;">
+      <div style="font-size: 0.875rem; font-weight: 500; color: var(--color-text-muted);">Elevación</div>
+      <div style="display: grid; gap: 12px;">
+        <div style="padding: 16px; border-radius: var(--radius-md); background: var(--color-surface); box-shadow: var(--shadow-sm); font-size: 0.875rem;">shadow-sm · tarjetas y filas</div>
+        <div style="padding: 16px; border-radius: var(--radius-md); background: var(--color-surface-2); box-shadow: var(--shadow-md); font-size: 0.875rem;">shadow-md · menús, botón flotante</div>
+        <div style="padding: 16px; border-radius: var(--radius-lg); background: var(--color-surface-2); box-shadow: var(--shadow-lg); font-size: 0.875rem;">shadow-lg · diálogos, toasts, arrastre</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="iconos" style="display: grid; gap: 24px; padding: 48px 0;">
+  <div style="display: grid; gap: 4px;"><span style="font-size: 0.875rem; font-weight: 500; color: var(--color-accent-text);">04</span><h2 style="margin: 0; font-size: 1.75rem; font-weight: 600; letter-spacing: -0.02em;">Iconografía</h2><p style="margin: 0; max-width: 60ch; color: var(--color-text-muted);">Phosphor Regular, 20px dentro de botones y 24px en navegación. Siempre acompañados de su etiqueta.</p></div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px;">
+    <div style="display: grid; justify-items: center; gap: 6px; padding: 16px 8px; border-radius: var(--radius-md); background: var(--color-surface); box-shadow: var(--shadow-sm);"><i class="ph ph-house" style="font-size: 1.5rem;"></i><span style="font-size: 0.875rem;">Inicio</span></div>
+    <div style="display: grid; justify-items: center; gap: 6px; padding: 16px 8px; border-radius: var(--radius-md); background: var(--color-surface); box-shadow: var(--shadow-sm);"><i class="ph ph-users" style="font-size: 1.5rem;"></i><span style="font-size: 0.875rem;">Contactos</span></div>
+    <div style="display: grid; justify-items: center; gap: 6px; padding: 16px 8px; border-radius: var(--radius-md); background: var(--color-surface); box-shadow: var(--shadow-sm);"><i class="ph ph-kanban" style="font-size: 1.5rem;"></i><span style="font-size: 0.875rem;">Deals</span></div>
+    <div style="display: grid; justify-items: center; gap: 6px; padding: 16px 8px; border-radius: var(--radius-md); background: var(--color-surface); box-shadow: var(--shadow-sm);"><i class="ph ph-check-square" style="font-size: 1.5rem;"></i><span style="font-size: 0.875rem;">Tareas</span></div>
+    <div style="display: grid; justify-items: center; gap: 6px; padding: 16px 8px; border-radius: var(--radius-md); background: var(--color-surface); box-shadow: var(--shadow-sm);"><i class="ph ph-phone" style="font-size: 1.5rem;"></i><span style="font-size: 0.875rem;">Llamar</span></div>
+    <div style="display: grid; justify-items: center; gap: 6px; padding: 16px 8px; border-radius: var(--radius-md); background: var(--color-surface); box-shadow: var(--shadow-sm);"><i class="ph ph-whatsapp-logo" style="font-size: 1.5rem;"></i><span style="font-size: 0.875rem;">WhatsApp</span></div>
+    <div style="display: grid; justify-items: center; gap: 6px; padding: 16px 8px; border-radius: var(--radius-md); background: var(--color-surface); box-shadow: var(--shadow-sm);"><i class="ph ph-envelope-simple" style="font-size: 1.5rem;"></i><span style="font-size: 0.875rem;">Email</span></div>
+    <div style="display: grid; justify-items: center; gap: 6px; padding: 16px 8px; border-radius: var(--radius-md); background: var(--color-surface); box-shadow: var(--shadow-sm);"><i class="ph ph-note-pencil" style="font-size: 1.5rem;"></i><span style="font-size: 0.875rem;">Nota</span></div>
+    <div style="display: grid; justify-items: center; gap: 6px; padding: 16px 8px; border-radius: var(--radius-md); background: var(--color-surface); box-shadow: var(--shadow-sm);"><i class="ph ph-magnifying-glass" style="font-size: 1.5rem;"></i><span style="font-size: 0.875rem;">Buscar</span></div>
+    <div style="display: grid; justify-items: center; gap: 6px; padding: 16px 8px; border-radius: var(--radius-md); background: var(--color-surface); box-shadow: var(--shadow-sm);"><i class="ph ph-funnel-simple" style="font-size: 1.5rem;"></i><span style="font-size: 0.875rem;">Filtrar</span></div>
+    <div style="display: grid; justify-items: center; gap: 6px; padding: 16px 8px; border-radius: var(--radius-md); background: var(--color-surface); box-shadow: var(--shadow-sm);"><i class="ph ph-plus" style="font-size: 1.5rem;"></i><span style="font-size: 0.875rem;">Nuevo</span></div>
+    <div style="display: grid; justify-items: center; gap: 6px; padding: 16px 8px; border-radius: var(--radius-md); background: var(--color-surface); box-shadow: var(--shadow-sm);"><i class="ph ph-dots-three" style="font-size: 1.5rem;"></i><span style="font-size: 0.875rem;">Más</span></div>
+  </div>
+</section>
+
+<section id="botones" style="display: grid; gap: 24px; padding: 48px 0;">
+  <div style="display: grid; gap: 4px;"><span style="font-size: 0.875rem; font-weight: 500; color: var(--color-accent-text);">05</span><h2 style="margin: 0; font-size: 1.75rem; font-weight: 600; letter-spacing: -0.02em;">Botones</h2><p style="margin: 0; max-width: 60ch; color: var(--color-text-muted);">La acción principal va en contorno de acento. En móvil, 48px por defecto; 36px solo en web con ratón.</p></div>
+  <div style="display: grid; gap: 8px;"><div style="font-size: 0.875rem; font-weight: 500; color: var(--color-text-muted);">Variantes</div>
+    <div style="display: flex; flex-wrap: wrap; gap: 12px;">
+      <button class="btn btn-primary btn-lg"><i class="ph ph-floppy-disk"></i>Guardar</button>
+      <button class="btn btn-secondary btn-lg"><i class="ph ph-phone"></i>Llamar</button>
+      <button class="btn btn-ghost btn-lg">Ver historial</button>
+      <button class="btn btn-danger btn-lg"><i class="ph ph-trash"></i>Eliminar</button>
+      <button class="btn btn-secondary btn-icon" aria-label="Más opciones"><i class="ph ph-dots-three"></i></button>
+    </div>
+  </div>
+  <div style="display: grid; gap: 8px;"><div style="font-size: 0.875rem; font-weight: 500; color: var(--color-text-muted);">Tamaños</div>
+    <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px;">
+      <button class="btn btn-primary btn-sm">Pequeño · 36</button>
+      <button class="btn btn-primary">Medio · 44</button>
+      <button class="btn btn-primary btn-lg">Grande · 48</button>
+    </div>
+  </div>
+  <div style="display: grid; gap: 8px;"><div style="font-size: 0.875rem; font-weight: 500; color: var(--color-text-muted);">Estados</div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px;">
+      <div style="display: grid; gap: 8px; justify-items: start;"><button class="btn btn-primary btn-lg">Guardar</button><span style="font-size: 0.875rem; color: var(--color-text-subtle);">Normal</span></div>
+      <div style="display: grid; gap: 8px; justify-items: start;"><button class="btn btn-primary btn-lg" style="background: color-mix(in srgb, var(--color-accent) 14%, transparent);">Guardar</button><span style="font-size: 0.875rem; color: var(--color-text-subtle);">Hover · 14% acento</span></div>
+      <div style="display: grid; gap: 8px; justify-items: start;"><button class="btn btn-primary btn-lg" style="outline: 2px solid var(--color-accent); outline-offset: 2px;">Guardar</button><span style="font-size: 0.875rem; color: var(--color-text-subtle);">Focus · anillo 2px</span></div>
+      <div style="display: grid; gap: 8px; justify-items: start;"><button class="btn btn-primary btn-lg" style="background: color-mix(in srgb, var(--color-accent) 24%, transparent); transform: scale(0.98);">Guardar</button><span style="font-size: 0.875rem; color: var(--color-text-subtle);">Pulsado · escala 0.98</span></div>
+      <div style="display: grid; gap: 8px; justify-items: start;"><button class="btn btn-primary btn-lg" aria-busy="true"><i class="ph ph-circle-notch spin"></i>Guardando…</button><span style="font-size: 0.875rem; color: var(--color-text-subtle);">Cargando</span></div>
+      <div style="display: grid; gap: 8px; justify-items: start;"><button class="btn btn-primary btn-lg" disabled="">Guardar</button><span style="font-size: 0.875rem; color: var(--color-text-subtle);">Desactivado · 45%</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="campos" style="display: grid; gap: 24px; padding: 48px 0;">
+  <div style="display: grid; gap: 4px;"><span style="font-size: 0.875rem; font-weight: 500; color: var(--color-accent-text);">06</span><h2 style="margin: 0; font-size: 1.75rem; font-weight: 600; letter-spacing: -0.02em;">Campos</h2><p style="margin: 0; max-width: 60ch; color: var(--color-text-muted);">48px de alto y texto de 16px para que iOS no haga zoom. Etiqueta siempre visible encima, nunca solo placeholder.</p></div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 24px;">
+    <div class="field"><label for="f1">Nombre del contacto</label><input id="f1" class="input" placeholder="Ej. Lucía Ortega"><span class="field-help">Normal</span></div>
+    <div class="field"><label for="f2">Teléfono</label><input id="f2" class="input" value="+34 612 345 678" style="border-color: var(--color-accent); outline: 2px solid var(--color-accent); outline-offset: 1px;"><span class="field-help">Focus</span></div>
+    <div class="field"><label for="f3">Email</label><input id="f3" class="input" value="lucia@estudiobrisa" aria-invalid="true"><span class="field-error"><i class="ph ph-warning-circle"></i>Falta el dominio, por ejemplo .com</span></div>
+    <div class="field"><label for="f4">Empresa</label><input id="f4" class="input" value="Estudio Brisa" disabled=""><span class="field-help">Desactivado</span></div>
+    <div class="field"><label for="f5">Buscar</label><div style="position: relative;"><i class="ph ph-magnifying-glass" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 1.25rem; color: var(--color-text-subtle);"></i><input id="f5" class="input" placeholder="Contactos, empresas o deals" style="padding-left: 44px;"></div><span class="field-help">Con icono</span></div>
+    <div class="field"><label>Etapa</label><div class="seg" role="radiogroup" style="align-self: flex-start;"><label class="seg-opt"><input type="radio" name="stage-demo">Abiertos</label><label class="seg-opt"><input type="radio" name="stage-demo" checked="">Ganados</label><label class="seg-opt"><input type="radio" name="stage-demo">Perdidos</label></div><span class="field-help">Control segmentado · seleccionado</span></div>
+  </div>
+</section>
+
+<section id="crm" style="display: grid; gap: 24px; padding: 48px 0;">
+  <div style="display: grid; gap: 4px;"><span style="font-size: 0.875rem; font-weight: 500; color: var(--color-accent-text);">07</span><h2 style="margin: 0; font-size: 1.75rem; font-weight: 600; letter-spacing: -0.02em;">Componentes de CRM</h2><p style="margin: 0; max-width: 60ch; color: var(--color-text-muted);">Etapas del deal, filas de contacto, tarjetas de pipeline y feedback.</p></div>
+
+  <div style="display: grid; gap: 8px;"><div style="font-size: 0.875rem; font-weight: 500; color: var(--color-text-muted);">Etapas del deal</div>
+    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+      <span class="tag tag-neutral"><i class="ph ph-circle-dashed"></i>Nuevo</span>
+      <span class="tag tag-info"><i class="ph ph-chat-circle"></i>Contactado</span>
+      <span class="tag tag-accent"><i class="ph ph-file-text"></i>Propuesta</span>
+      <span class="tag tag-warning"><i class="ph ph-handshake"></i>Negociación</span>
+      <span class="tag tag-success"><i class="ph ph-check-circle"></i>Ganado</span>
+      <span class="tag tag-danger"><i class="ph ph-x-circle"></i>Perdido</span>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 24px; align-items: start;">
+    <div style="display: grid; gap: 8px;"><div style="font-size: 0.875rem; font-weight: 500; color: var(--color-text-muted);">Fila de contacto · reposo y deslizada</div>
+      <div style="border-radius: var(--radius-md); background: var(--color-surface); box-shadow: var(--shadow-sm); overflow: hidden;">
+        <div style="display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 12px 16px; min-height: 72px; border-bottom: 1px solid var(--color-border);">
+          <div style="width: 44px; height: 44px; border-radius: var(--radius-sm); background: var(--color-surface-2); box-shadow: inset 0 0 0 1px var(--color-border); display: grid; place-items: center; font-weight: 600; font-size: 0.875rem; color: var(--color-text-muted);">EB</div>
+          <div style="min-width: 0;"><div style="font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Lucía Ortega</div><div style="font-size: 0.875rem; color: var(--color-text-muted);">Estudio Brisa · hace 2 h</div></div>
+          <div style="display: grid; justify-items: end; gap: 4px;"><span class="tabular" style="font-weight: 500;">2.400 €</span><span class="tag tag-accent" style="font-size: 0.75rem; padding: 2px 8px;"><i class="ph ph-file-text"></i>Propuesta</span></div>
+        </div>
+        <div style="position: relative; overflow: hidden;">
+          <div style="position: absolute; inset: 0; display: flex; justify-content: flex-end;">
+            <div style="width: 80px; display: grid; place-items: center; align-content: center; gap: 2px; background: var(--color-info-bg); color: var(--color-info-fg); font-size: 0.75rem; font-weight: 500;"><i class="ph ph-phone" style="font-size: 1.5rem;"></i>Llamar</div>
+            <div style="width: 80px; display: grid; place-items: center; align-content: center; gap: 2px; background: var(--color-success-bg); color: var(--color-success-fg); font-size: 0.75rem; font-weight: 500;"><i class="ph ph-whatsapp-logo" style="font-size: 1.5rem;"></i>WhatsApp</div>
+          </div>
+          <div style="position: relative; transform: translateX(-160px); display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 12px 16px; min-height: 72px; background: var(--color-surface-2);">
+            <div style="width: 44px; height: 44px; border-radius: var(--radius-sm); background: var(--color-surface); box-shadow: inset 0 0 0 1px var(--color-border); display: grid; place-items: center; font-weight: 600; font-size: 0.875rem; color: var(--color-text-muted);">MF</div>
+            <div style="min-width: 0;"><div style="font-weight: 500;">Javier Molina</div><div style="font-size: 0.875rem; color: var(--color-text-muted);">Molina Fitness · ayer</div></div>
+            <div style="display: grid; justify-items: end; gap: 4px;"><span class="tabular" style="font-weight: 500;">890 €</span><span class="tag tag-warning" style="font-size: 0.75rem; padding: 2px 8px;"><i class="ph ph-handshake"></i>Negociación</span></div>
+          </div>
+        </div>
+      </div>
+      <div style="font-size: 0.875rem; color: var(--color-text-subtle);">Min. 72px de alto. Deslizar a la izquierda muestra Llamar y WhatsApp.</div>
+    </div>
+
+    <div style="display: grid; gap: 8px;"><div style="font-size: 0.875rem; font-weight: 500; color: var(--color-text-muted);">Tarjeta de deal · reposo y arrastrando</div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 16px;">
+        <div class="card">
+          <div style="display: flex; align-items: center; gap: 8px;"><div style="width: 28px; height: 28px; border-radius: 6px; background: var(--color-surface-2); box-shadow: inset 0 0 0 1px var(--color-border); display: grid; place-items: center; font-size: 0.75rem; font-weight: 600; color: var(--color-text-muted);">TO</div><span style="font-size: 0.875rem; color: var(--color-text-muted);">Tienda Olivo</span></div>
+          <div style="font-weight: 600;">Web + tienda online</div>
+          <div class="tabular" style="font-size: 1.4375rem; font-weight: 600; letter-spacing: -0.01em;">3.200 €</div>
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;"><span style="display: flex; align-items: center; gap: 4px; font-size: 0.875rem; color: var(--color-warning-fg);"><i class="ph ph-calendar-blank"></i>Vence hoy</span><span style="width: 28px; height: 28px; border-radius: 50%; background: var(--color-accent-bg); color: var(--color-accent-text); display: grid; place-items: center; font-size: 0.75rem; font-weight: 600;" title="Carlos Martín">CM</span></div>
+        </div>
+        <div class="card" style="background: var(--color-surface-2); box-shadow: 0 0 0 1px var(--color-accent), 0 16px 40px rgb(0 0 0 / 0.35); transform: rotate(-1.5deg);">
+          <div style="display: flex; align-items: center; gap: 8px;"><div style="width: 28px; height: 28px; border-radius: 6px; background: var(--color-surface); box-shadow: inset 0 0 0 1px var(--color-border); display: grid; place-items: center; font-size: 0.75rem; font-weight: 600; color: var(--color-text-muted);">SC</div><span style="font-size: 0.875rem; color: var(--color-text-muted);">Sanz Consultores</span></div>
+          <div style="font-weight: 600;">Campaña de email</div>
+          <div class="tabular" style="font-size: 1.4375rem; font-weight: 600; letter-spacing: -0.01em;">1.150 €</div>
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;"><span style="display: flex; align-items: center; gap: 4px; font-size: 0.875rem; color: var(--color-text-muted);"><i class="ph ph-calendar-blank"></i>3 oct.</span><span style="width: 28px; height: 28px; border-radius: 50%; background: var(--color-accent-bg); color: var(--color-accent-text); display: grid; place-items: center; font-size: 0.75rem; font-weight: 600;" title="Marta López">ML</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 24px; align-items: start;">
+    <div style="display: grid; gap: 8px;"><div style="font-size: 0.875rem; font-weight: 500; color: var(--color-text-muted);">Toast con deshacer</div>
+      <div style="display: flex; align-items: center; gap: 12px; padding: 8px 8px 8px 16px; border-radius: var(--radius-md); background: var(--color-surface-2); box-shadow: var(--shadow-lg);"><i class="ph ph-check-circle" style="font-size: 1.25rem; color: var(--color-success-fg);"></i><span style="flex: 1;">Deal movido a Ganado</span><button class="btn btn-ghost">Deshacer</button></div>
+      <div><button class="btn btn-secondary" onClick="{{ showToast }}"><i class="ph ph-play"></i>Probar</button></div>
+    </div>
+    <div style="display: grid; gap: 8px;"><div style="font-size: 0.875rem; font-weight: 500; color: var(--color-text-muted);">Sin conexión</div>
+      <div role="status" style="display: flex; gap: 12px; align-items: flex-start; padding: 12px 16px; border-radius: var(--radius-md); background: var(--color-warning-bg); color: var(--color-warning-fg);"><i class="ph ph-wifi-slash" style="font-size: 1.25rem; margin-top: 2px;"></i><span>Sin conexión. Tus cambios se guardan y se enviarán al volver la red.</span></div>
+    </div>
+    <div style="display: grid; gap: 8px;"><div style="font-size: 0.875rem; font-weight: 500; color: var(--color-text-muted);">Cargando · skeleton</div>
+      <div style="display: grid; gap: 12px; padding: 16px; border-radius: var(--radius-md); background: var(--color-surface); box-shadow: var(--shadow-sm);">
+        <div style="display: flex; gap: 12px; align-items: center;"><div class="skeleton" style="width: 44px; height: 44px;"></div><div style="flex: 1; display: grid; gap: 8px;"><div class="skeleton" style="height: 14px; width: 60%;"></div><div class="skeleton" style="height: 12px; width: 40%;"></div></div></div>
+        <div style="display: flex; gap: 12px; align-items: center;"><div class="skeleton" style="width: 44px; height: 44px;"></div><div style="flex: 1; display: grid; gap: 8px;"><div class="skeleton" style="height: 14px; width: 50%;"></div><div class="skeleton" style="height: 12px; width: 30%;"></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: grid; gap: 8px;"><div style="font-size: 0.875rem; font-weight: 500; color: var(--color-text-muted);">Diálogo de confirmación</div>
+    <div style="display: grid; place-items: center; padding: 40px 16px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--color-bg) 60%, var(--color-neutral-900));">
+      <div class="dialog" role="dialog" aria-labelledby="dlg-t" style="border-radius: var(--radius-lg); padding: 24px; gap: 12px; background: var(--color-surface-2);">
+        <div id="dlg-t" class="dialog-title" style="font-size: 1.1875rem; font-weight: 600;">¿Eliminar a Lucía Ortega?</div>
+        <div class="dialog-body" style="font-size: 1rem; opacity: 1; color: var(--color-text-muted);">Se borrarán sus 3 deals y notas. Esta acción no se puede deshacer.</div>
+        <div class="dialog-actions" style="gap: 8px; flex-wrap: wrap;"><button class="btn btn-secondary btn-lg">Cancelar</button><button class="btn btn-danger btn-lg"><i class="ph ph-trash"></i>Eliminar</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="navegacion" style="display: grid; gap: 24px; padding: 48px 0;">
+  <div style="display: grid; gap: 4px;"><span style="font-size: 0.875rem; font-weight: 500; color: var(--color-accent-text);">08</span><h2 style="margin: 0; font-size: 1.75rem; font-weight: 600; letter-spacing: -0.02em;">Navegación y patrones</h2><p style="margin: 0; max-width: 60ch; color: var(--color-text-muted);">En móvil, barra inferior con 5 destinos y botón flotante "+ Nuevo", respetando las safe areas. Desde 1024px, sidebar.</p></div>
+  <div style="display: flex; flex-wrap: wrap; gap: 32px; align-items: flex-start;">
+
+    <div style="position: relative; width: 360px; max-width: 100%; height: 740px; border-radius: 32px; overflow: hidden; background: var(--color-bg); box-shadow: 0 0 0 1px var(--color-border-strong), var(--shadow-lg); display: flex; flex-direction: column;">
+      <div style="display: flex; align-items: center; gap: 8px; padding: 44px 16px 12px;">
+        <h3 style="margin: 0; flex: 1; font-size: 1.75rem; font-weight: 600; letter-spacing: -0.02em;">Deals</h3>
+        <button class="btn btn-secondary btn-icon" aria-label="Buscar" style="width: 48px; height: 48px;"><i class="ph ph-magnifying-glass"></i></button>
+      </div>
+      <div style="display: flex; gap: 8px; padding: 0 16px 12px; overflow-x: auto;">
+        <button class="btn btn-sm" style="min-height: 40px; border-radius: var(--radius-full); background: var(--color-accent-bg); color: var(--color-accent-text); border-color: var(--color-accent);">Abiertos · 12</button>
+        <button class="btn btn-secondary btn-sm" style="min-height: 40px; border-radius: var(--radius-full);">Hoy · 3</button>
+        <button class="btn btn-secondary btn-sm" style="min-height: 40px; border-radius: var(--radius-full);">Ganados</button>
+      </div>
+      <div style="flex: 1; overflow: hidden; display: grid; align-content: start;">
+        <div style="padding: 8px 16px; font-size: 0.875rem; color: var(--color-text-subtle);">Total abierto <span class="tabular" style="color: var(--color-text); font-weight: 500;">14.320 €</span></div>
+        <div style="display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 12px 16px; min-height: 72px; border-bottom: 1px solid var(--color-border);"><div style="width: 44px; height: 44px; border-radius: var(--radius-sm); background: var(--color-surface-2); box-shadow: inset 0 0 0 1px var(--color-border); display: grid; place-items: center; font-weight: 600; font-size: 0.875rem; color: var(--color-text-muted);">EB</div><div style="min-width: 0;"><div style="font-weight: 500;">Lucía Ortega</div><div style="font-size: 0.875rem; color: var(--color-text-muted);">Estudio Brisa</div></div><div style="display: grid; justify-items: end; gap: 4px;"><span class="tabular" style="font-weight: 500;">2.400 €</span><span class="tag tag-accent" style="font-size: 0.75rem; padding: 2px 8px;">Propuesta</span></div></div>
+        <div style="display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 12px 16px; min-height: 72px; border-bottom: 1px solid var(--color-border);"><div style="width: 44px; height: 44px; border-radius: var(--radius-sm); background: var(--color-surface-2); box-shadow: inset 0 0 0 1px var(--color-border); display: grid; place-items: center; font-weight: 600; font-size: 0.875rem; color: var(--color-text-muted);">TO</div><div style="min-width: 0;"><div style="font-weight: 500;">Ana Ruiz</div><div style="font-size: 0.875rem; color: var(--color-warning-fg);">Tienda Olivo · vence hoy</div></div><div style="display: grid; justify-items: end; gap: 4px;"><span class="tabular" style="font-weight: 500;">3.200 €</span><span class="tag tag-warning" style="font-size: 0.75rem; padding: 2px 8px;">Negociación</span></div></div>
+        <div style="display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 12px 16px; min-height: 72px; border-bottom: 1px solid var(--color-border);"><div style="width: 44px; height: 44px; border-radius: var(--radius-sm); background: var(--color-surface-2); box-shadow: inset 0 0 0 1px var(--color-border); display: grid; place-items: center; font-weight: 600; font-size: 0.875rem; color: var(--color-text-muted);">MF</div><div style="min-width: 0;"><div style="font-weight: 500;">Javier Molina</div><div style="font-size: 0.875rem; color: var(--color-text-muted);">Molina Fitness</div></div><div style="display: grid; justify-items: end; gap: 4px;"><span class="tabular" style="font-weight: 500;">890 €</span><span class="tag tag-info" style="font-size: 0.75rem; padding: 2px 8px;">Contactado</span></div></div>
+        <div style="display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 12px 16px; min-height: 72px; border-bottom: 1px solid var(--color-border);"><div style="width: 44px; height: 44px; border-radius: var(--radius-sm); background: var(--color-surface-2); box-shadow: inset 0 0 0 1px var(--color-border); display: grid; place-items: center; font-weight: 600; font-size: 0.875rem; color: var(--color-text-muted);">SC</div><div style="min-width: 0;"><div style="font-weight: 500;">Pablo Sanz</div><div style="font-size: 0.875rem; color: var(--color-text-muted);">Sanz Consultores</div></div><div style="display: grid; justify-items: end; gap: 4px;"><span class="tabular" style="font-weight: 500;">1.150 €</span><span class="tag tag-neutral" style="font-size: 0.75rem; padding: 2px 8px;">Nuevo</span></div></div>
+      </div>
+      <button class="btn btn-fab" style="position: absolute; right: 16px; bottom: 100px;"><i class="ph ph-plus"></i>Nuevo</button>
+      <nav class="safe-bottom" aria-label="Principal" style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); padding: 4px 4px 20px; background: var(--color-surface); border-top: 1px solid var(--color-border);">
+        <a href="#" style="position: relative; display: grid; justify-items: center; gap: 2px; min-height: 56px; padding-top: 8px; text-decoration: none; color: var(--color-text-muted); font-size: 0.75rem; font-weight: 500;"><i class="ph ph-house" style="font-size: 1.5rem;"></i>Inicio</a>
+        <a href="#" style="position: relative; display: grid; justify-items: center; gap: 2px; min-height: 56px; padding-top: 8px; text-decoration: none; color: var(--color-text-muted); font-size: 0.75rem; font-weight: 500;"><i class="ph ph-users" style="font-size: 1.5rem;"></i>Contactos</a>
+        <a href="#" aria-current="page" style="position: relative; display: grid; justify-items: center; gap: 2px; min-height: 56px; padding-top: 8px; text-decoration: none; color: var(--color-accent-text); font-size: 0.75rem; font-weight: 600;"><span style="position: absolute; top: 0; width: 24px; height: 2px; border-radius: 2px; background: var(--color-accent);"></span><i class="ph ph-kanban" style="font-size: 1.5rem;"></i>Deals</a>
+        <a href="#" style="position: relative; display: grid; justify-items: center; gap: 2px; min-height: 56px; padding-top: 8px; text-decoration: none; color: var(--color-text-muted); font-size: 0.75rem; font-weight: 500;"><i class="ph ph-check-square" style="font-size: 1.5rem;"></i>Tareas</a>
+        <a href="#" style="position: relative; display: grid; justify-items: center; gap: 2px; min-height: 56px; padding-top: 8px; text-decoration: none; color: var(--color-text-muted); font-size: 0.75rem; font-weight: 500;"><i class="ph ph-dots-three" style="font-size: 1.5rem;"></i>Más</a>
+      </nav>
+    </div>
+
+    <div style="flex: 1 1 480px; min-width: 0; overflow-x: auto; border-radius: var(--radius-lg); box-shadow: 0 0 0 1px var(--color-border-strong);">
+      <div style="display: grid; grid-template-columns: 220px minmax(0, 1fr); min-width: 720px; min-height: 480px; background: var(--color-bg);">
+        <aside style="display: flex; flex-direction: column; gap: 4px; padding: 16px 12px; background: var(--color-surface); border-right: 1px solid var(--color-border);">
+          <div style="display: flex; align-items: center; gap: 8px; padding: 4px 12px 16px; font-size: 1.1875rem; font-weight: 600; letter-spacing: -0.02em;"><span style="width: 8px; height: 8px; border-radius: 2px; background: var(--color-accent);"></span>CRM</div>
+          <a href="#" style="display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 0 12px; border-radius: var(--radius-md); text-decoration: none; color: var(--color-text-muted); font-weight: 500;"><i class="ph ph-house" style="font-size: 1.25rem;"></i>Inicio</a>
+          <a href="#" aria-current="page" style="display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 0 12px; border-radius: var(--radius-md); text-decoration: none; color: var(--color-text); font-weight: 500; background: var(--color-surface-2);"><i class="ph ph-users" style="font-size: 1.25rem; color: var(--color-accent-text);"></i>Contactos</a>
+          <a href="#" style="display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 0 12px; border-radius: var(--radius-md); text-decoration: none; color: var(--color-text-muted); font-weight: 500;"><i class="ph ph-kanban" style="font-size: 1.25rem;"></i>Deals</a>
+          <a href="#" style="display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 0 12px; border-radius: var(--radius-md); text-decoration: none; color: var(--color-text-muted); font-weight: 500;"><i class="ph ph-check-square" style="font-size: 1.25rem;"></i>Tareas<span class="tag tag-warning" style="margin-left: auto; font-size: 0.75rem; padding: 0 6px;">3</span></a>
+        </aside>
+        <div style="display: grid; align-content: start; gap: 16px; padding: 24px;">
+          <div style="display: flex; align-items: center; gap: 12px;"><h3 style="margin: 0; flex: 1; font-size: 1.4375rem; font-weight: 600; letter-spacing: -0.015em;">Contactos</h3><button class="btn btn-secondary"><i class="ph ph-funnel-simple"></i>Filtrar</button><button class="btn btn-primary"><i class="ph ph-plus"></i>Nuevo contacto</button></div>
+          <table class="table" style="font-size: 0.9375rem;">
+            <thead><tr><th style="font-size: 0.75rem; letter-spacing: 0.04em; padding: 8px 12px;">Nombre</th><th style="font-size: 0.75rem; letter-spacing: 0.04em; padding: 8px 12px;">Empresa</th><th style="font-size: 0.75rem; letter-spacing: 0.04em; padding: 8px 12px;">Etapa</th><th style="font-size: 0.75rem; letter-spacing: 0.04em; padding: 8px 12px; text-align: right;">Importe</th></tr></thead>
+            <tbody>
+              <tr><td style="padding: 12px; font-weight: 500;">Lucía Ortega</td><td style="padding: 12px; color: var(--color-text-muted);">Estudio Brisa</td><td style="padding: 12px;"><span class="tag tag-accent" style="font-size: 0.75rem;"><i class="ph ph-file-text"></i>Propuesta</span></td><td class="tabular" style="padding: 12px; text-align: right;">2.400 €</td></tr>
+              <tr><td style="padding: 12px; font-weight: 500;">Ana Ruiz</td><td style="padding: 12px; color: var(--color-text-muted);">Tienda Olivo</td><td style="padding: 12px;"><span class="tag tag-warning" style="font-size: 0.75rem;"><i class="ph ph-handshake"></i>Negociación</span></td><td class="tabular" style="padding: 12px; text-align: right;">3.200 €</td></tr>
+              <tr><td style="padding: 12px; font-weight: 500;">Javier Molina</td><td style="padding: 12px; color: var(--color-text-muted);">Molina Fitness</td><td style="padding: 12px;"><span class="tag tag-info" style="font-size: 0.75rem;"><i class="ph ph-chat-circle"></i>Contactado</span></td><td class="tabular" style="padding: 12px; text-align: right;">890 €</td></tr>
+              <tr><td style="padding: 12px; font-weight: 500;">Pablo Sanz</td><td style="padding: 12px; color: var(--color-text-muted);">Sanz Consultores</td><td style="padding: 12px;"><span class="tag tag-success" style="font-size: 0.75rem;"><i class="ph ph-check-circle"></i>Ganado</span></td><td class="tabular" style="padding: 12px; text-align: right;">1.150 €</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="movimiento" style="display: grid; gap: 24px; padding: 48px 0;">
+  <div style="display: grid; gap: 4px;"><span style="font-size: 0.875rem; font-weight: 500; color: var(--color-accent-text);">09</span><h2 style="margin: 0; font-size: 1.75rem; font-weight: 600; letter-spacing: -0.02em;">Movimiento y código</h2><p style="margin: 0; max-width: 60ch; color: var(--color-text-muted);">Animaciones cortas con ease-out. Con "reducir movimiento" activado, todas pasan a instantáneas.</p></div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 12px;">
+    <div class="card"><div class="tabular" style="font-size: 1.4375rem; font-weight: 600;">120ms</div><div style="font-size: 0.875rem; color: var(--color-text-muted);">--duration-fast · hover, pulsar, focus</div></div>
+    <div class="card"><div class="tabular" style="font-size: 1.4375rem; font-weight: 600;">180ms</div><div style="font-size: 0.875rem; color: var(--color-text-muted);">--duration-base · toasts, deslizar, hojas</div></div>
+    <div class="card"><div class="tabular" style="font-size: 1.4375rem; font-weight: 600;">240ms</div><div style="font-size: 0.875rem; color: var(--color-text-muted);">--duration-slow · cambio de pantalla</div></div>
+  </div>
+  <div style="display: grid; gap: 8px;">
+    <div style="font-size: 0.875rem; font-weight: 500; color: var(--color-text-muted);">Tailwind v4 · <a href="tailwind.css">tailwind.css</a> · CSS puro: <a href="crm-tokens.css">crm-tokens.css</a></div>
+    <pre style="margin: 0; padding: 16px; overflow-x: auto; border-radius: var(--radius-md); background: var(--color-surface); box-shadow: var(--shadow-sm); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.875rem; line-height: 1.6; color: var(--color-text-muted);">&lt;html data-theme="light"&gt;  &lt;!-- sin atributo = oscuro --&gt;
+
+&lt;button class="btn btn-primary btn-lg"&gt;Guardar&lt;/button&gt;
+&lt;span class="tag tag-success"&gt;&lt;i class="ph ph-check-circle"&gt;&lt;/i&gt;Ganado&lt;/span&gt;
+
+&lt;div class="bg-surface text-text rounded-md shadow-sm p-4"&gt;
+  &lt;p class="text-sm text-text-muted"&gt;Última actividad hace 2 h&lt;/p&gt;
+  &lt;p class="text-xl font-semibold tabular"&gt;3.200 €&lt;/p&gt;
+&lt;/div&gt;</pre>
+  </div>
+</section>
+
+</div>
+
+<sc-if value="{{ toastVisible }}" hint-placeholder-val="{{ false }}">
+  <div role="status" style="position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); width: min(420px, calc(100% - 32px)); display: flex; align-items: center; gap: 12px; padding: 8px 8px 8px 16px; border-radius: var(--radius-md); background: var(--color-surface-2); box-shadow: var(--shadow-lg); z-index: 10;"><i class="ph ph-check-circle" style="font-size: 1.25rem; color: var(--color-success-fg);"></i><span style="flex: 1;">Deal movido a Ganado</span><button class="btn btn-ghost" onClick="{{ hideToast }}">Deshacer</button></div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;oscuro&quot;,&quot;claro&quot;],&quot;default&quot;:&quot;oscuro&quot;,&quot;tsType&quot;:&quot;'oscuro'|'claro'&quot;,&quot;section&quot;:&quot;Vista&quot;},&quot;textScale&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;100%&quot;,&quot;150%&quot;,&quot;200%&quot;],&quot;default&quot;:&quot;100%&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Vista&quot;}}">
+class Component extends DCLogic {
+  state = { theme: null, toast: false };
+  applyScale() {
+    const s = this.props.textScale ?? '100%';
+    document.documentElement.style.fontSize = s;
+  }
+  componentDidMount() { this.applyScale(); }
+  componentDidUpdate(prev) {
+    if (prev.textScale !== this.props.textScale) this.applyScale();
+    if (prev.theme !== this.props.theme) this.setState({ theme: null });
+  }
+  componentWillUnmount() { clearTimeout(this.t); }
+  renderVals() {
+    const theme = this.state.theme ?? this.props.theme ?? 'oscuro';
+    const isDark = theme === 'oscuro';
+    return {
+      themeAttr: isDark ? 'dark' : 'light',
+      isDark, isLight: !isDark,
+      setDark: () => this.setState({ theme: 'oscuro' }),
+      setLight: () => this.setState({ theme: 'claro' }),
+      toastVisible: this.state.toast,
+      showToast: () => { clearTimeout(this.t); this.setState({ toast: true }); this.t = setTimeout(() => this.setState({ toast: false }), 4000); },
+      hideToast: () => { clearTimeout(this.t); this.setState({ toast: false }); },
+    };
+  }
+}
+</script>
+</body>
+</html>

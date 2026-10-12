@@ -1,0 +1,25 @@
+:root {
+  --spacing: 0.25rem; /* base 4px */
+  --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 0.75rem; --space-4: 1rem;
+  --space-5: 1.25rem; --space-6: 1.5rem; --space-8: 2rem; --space-12: 3rem;
+  --radius-sm: 0.5rem;   /* 8 · tags, logos */
+  --radius-md: 0.75rem;  /* 12 · botones, campos, tarjetas */
+  --radius-lg: 1rem;     /* 16 · diálogos, hojas */
+  --radius-full: 9999px; /* botón flotante, chips */
+  --size-control-sm: 2.25rem; /* 36 · solo web con ratón */
+  --size-control-md: 2.75rem; /* 44 */
+  --size-control-lg: 3rem;    /* 48 · por defecto en móvil */
+  --size-touch: 3rem;
+  --shadow-sm: 0 0 0 1px var(--color-border);
+  --shadow-md: 0 0 0 1px var(--color-border-strong), 0 4px 12px rgb(0 0 0 / 0.35);
+  --shadow-lg: 0 0 0 1px var(--color-border-strong), 0 16px 40px rgb(0 0 0 / 0.5);
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --duration-fast: 120ms;
+  --duration-base: 180ms;
+  --duration-slow: 240ms;
+}
+[data-theme="light"] {
+  --shadow-sm: 0 0 0 1px var(--color-border);
+  --shadow-md: 0 0 0 1px var(--color-border), 0 4px 12px rgb(27 28 40 / 0.08);
+  --shadow-lg: 0 0 0 1px var(--color-border), 0 16px 40px rgb(27 28 40 / 0.14);
+}
